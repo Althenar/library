@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HomeLibrary 2.1b{% endblock %}
+
+{% block body %}
+    {% for bookcase in bookcases %}
+        <div class="bookcase" data-id="{{ bookcase.id }}" id="bc{{ bookcase.id }}">
+        <script type="text/babel">
+            ReactDOM.render(
+                <Bookcase key="bc{{ bookcase.id }}" bookcaseId="{{ bookcase.id }}" />,
+                document.getElementById('bc{{ bookcase.id }}')
+            );
+        </script>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/babel" src="../js/Bookcase.js"></script>
+    <script type="text/babel" src="../js/Shelf.js"></script>
+    <script type="text/babel" src="../js/Book.js"></script>
+    <!--script>
+        $(document).ready(function() {
+            $("input[name='edit']").click(editMode);
+            $("input[name='editBooks']").click(bookEditMode);
+        });
+    </script-->
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Shelf</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Row</th>
+                <td>{{ entity.row }}</td>
+            </tr>
+            <tr>
+                <th>Col</th>
+                <td>{{ entity.col }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('shelf') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('shelf_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

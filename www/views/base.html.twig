@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+            <link rel="stylesheet" type="text/css" href="../css/main.css">
+        {% endblock %}
+        <script src="https://unpkg.com/react@latest/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@latest/umd/react-dom.production.min.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    </head>
+    <body>
+        {% block javascripts %}
+            <script src="../js/jquery.js"></script>
+            <script src="../js/bootstrap.js"></script>
+        {% endblock %}
+        {% block body %}{% endblock %}
+    </body>
+</html>

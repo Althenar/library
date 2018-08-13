@@ -1,0 +1,46 @@
+.shelf {
+    background: #EEE;
+    margin: 1%;
+    padding: 5px;
+    display: table-cell;
+    border: solid 1px;
+    min-width: 100px;
+    min-height: 50px;
+}
+
+.shelf-ajax {
+    background: #F0F0F0;
+}
+
+.placeholder {
+    display: table-cell;
+    min-width: 100px;
+    min-height: 50px;
+    text-align: center;
+}
+
+.potential {
+    display: table-cell;
+    min-width: 100px;
+    min-height: 50px;
+    text-align: center;
+}
+
+.shelves {
+    display: table;
+    border-collapse: collapse;
+}
+
+div.shelves > div {
+    display: table-row;
+}
+
+.book-ajax {
+    color: #999;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}

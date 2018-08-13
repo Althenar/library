@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HomeLibrary 2.0{% endblock %}
+
+{% block body %}
+    {% for bookcase in bookcases %}
+    <div class="bookcase" data-id="{{ bookcase.id }}" id="bc{{ bookcase.id }}">
+        <h1>Bookcase #{{ bookcase.id }} {{ bookcase.name}}</h1>
+            <input type="button" name="edit" value="Edit" />
+            <input type="button" name="editBooks" value="Edit books" />
+            <div class="shelves">
+                {% set currRow = 999 %}
+                {% set currCol = 0 %}
+                {% for shelf in bookcase.shelves %}
+                    {% if shelf.row < currRow %}
+                        {% if currRow<999 %}
+                            </div>
+                        {% else %}
+                            {% set currRow = shelf.row + 1 %}
+                        {% endif %}
+                        <div>
+                        {% set currRow = currRow - 1 %}
+                        {% set currCol = 0 %}
+                    {% endif %}
+                    {% if shelf.col - currCol > 1 %}
+                        {% for i in currCol..shelf.col-2 %}
+                        <section class="placeholder" data-row="{{ shelf.row }}" data-column="{{ i + 1 }}">&nbsp;</section>
+                        {% endfor %}
+                    {% endif %}
+                    <section class="shelf" data-row="{{ shelf.row }}" data-column="{{ shelf.col }}" data-id="{{shelf.id}}" id="s{{ shelf.id }}">
+                        <ul>
+                        {% for book in shelf.books %}
+                            <li class="book" data-id="{{book.id}}" id="b{{ book.id }}">
+                                [{{ book.isbn }}] {{ book.author }}: {{ book.title }}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </section>
+                    {% set currCol = shelf.col %}
+                {% endfor %}
+                {% if currRow > 0 %}
+                    </tr>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="../js/library.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("input[name='edit']").click(editMode);
+            $("input[name='editBooks']").click(bookEditMode);
+        });
+    </script>
+{% endblock %}
