@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HomeLib</string>
+    <string name="api_bookList">/bookList</string>
+    <string name="title_activity_book_view">BookView</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_book_detail">BookDetailActivity</string>
+    <string name="book_basic_data">&lt;b>Autor:&lt;/b> %1$s&lt;br />&lt;b>Tytuł:&lt;/b> %2$s&lt;br />&lt;b>ISBN:&lt;/b> %3$s&lt;br />&lt;br />&lt;b>Rząd:&lt;/b> %4$d&lt;br />&lt;b>Kolumna:&lt;/b> %5$d</string>
+</resources>
