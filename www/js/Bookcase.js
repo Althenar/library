@@ -84,16 +84,16 @@ class Bookcase extends React.Component {
         shelves.forEach(function (s) {
             var x = parseInt(s.col);
             var y = parseInt(s.row);
-            if (!this.findShelf(y, x+1, shelves)) {
+            if (!this.findShelf(y, x+1, shelves,true)) {
                 shelves.push(this.newCell(y, x+1));
             }
-            if (!this.findShelf(y+1, x, shelves)) {
+            if (!this.findShelf(y+1, x, shelves,true)) {
                 shelves.push(this.newCell(y+1, x));
             }
-            if (!this.findShelf(y-1, x, shelves) && y-1>0) {
+            if (!this.findShelf(y-1, x, shelves,true) && y-1>0) {
                 shelves.push(this.newCell(y-1, x));
             }
-            if (!this.findShelf(y, x-1, shelves) && x-1>0) {
+            if (!this.findShelf(y, x-1, shelves,true) && x-1>0) {
                 shelves.push(this.newCell(y, x-1));
             }
         }, this);
@@ -156,9 +156,9 @@ class Bookcase extends React.Component {
         );
     }
 
-    findShelf = (row, col, shelves = this.state.shelves) => {
+    findShelf = (row, col, shelves = this.state.shelves, potential = false) => {
         return shelves.find(function(s) {
-            return (s.row == row && s.col == col && !s.potential);
+            return (s.row == row && s.col == col && (potential || !s.potential));
         })
     }
 
