@@ -30,9 +30,19 @@ app.use(function(req, res, next) {
 //ORM
 const orm = require('orm');
 
-orm.connect("mysql://php_library@php_library@127.0.0.1/r_library", function (err, db) {
-    if (err) throw err;
-    console.log("connected");
+const db = orm.connect({
+    host:     '192.168.201.231',
+    database: 'r_library',
+    user:     'php_library',
+    password: 'php_library',
+    protocol: 'mysql',
+    port:     '3306',
+    query:    {pool: true, debug: true}
+});
+
+db.on('connect', function (err) {
+   if(err) return console.log("err" + err);
+   console.log("connected");
 });
 
 // error handler
