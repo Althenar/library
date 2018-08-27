@@ -6,14 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "body-parser": "latest",
+    "bookshelf": "^0.13.3",
+    "bookshelf-registry": "^1.0.0",
+    "bookshelf-validate": "^2.0.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
+    "knex": "^0.13.0",
     "morgan": "~1.9.0",
     "mysql": "^2.16.0",
-    "orm": "^5.0.2",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "validator": "^10.7.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

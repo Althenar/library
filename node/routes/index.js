@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-/* GET home page. */
+let Book = require('../models/Book');
+
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  Book.where({isbn: '8385696776'}).fetch({withRelated: ['shelf']})
+      .then(function(book) {
+          res.json(book);
+      })
+      .catch(function(err) {
+          return next(new Error(err));
+      });
 });
 
 module.exports = router;
