@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./"
   },
   "dependencies": {
-    "body-parser": "latest",
+    "body-parser": "^1.18.3",
     "bookshelf": "^0.13.3",
     "bookshelf-registry": "^1.0.0",
     "bookshelf-validate": "^2.0.3",
@@ -15,10 +15,13 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "knex": "^0.13.0",
+    "lodash": "^4.17.10",
     "morgan": "~1.9.0",
     "mysql": "^2.16.0",
     "pug": "2.0.0-beta11",
-    "validator": "^10.7.0"
+    "swagger-ui-express": "^4.0.0",
+    "validator": "^10.7.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
