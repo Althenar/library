@@ -1,51 +1,50 @@
 'use strict';
 
-const ShelfRepository = require('../../repository/shelf');
-const response = require('../');
+const Shelf = require('../').Shelf;
 
-function getAll(res,next){
-	const search = ShelfRepository.read.getAll();
-	return response.json(search,res,next);
+function getAll(){
+	const search = Shelf.fetchAll({withRelated: ['bookcase']});
+	return search;
 }
 
-function getById(id,res,next){
-	const search = ShelfRepository.read.getById(id);
-	return response.json(search,res,next);
+function getById(id){
+	const search = Shelf.where({id: id}).fetch({withRelated: ['bookcase']});
+	return search;
 }
 
-function getAllByRow(row,res,next){
-	const search = ShelfRepository.read.getAllByRow(row);
-	return response.json(search,res,next);
+function getAllByRow(row){
+	const search = Shelf.where({row: row}).fetchAll({withRelated: ['bookcase']});
+	return search;
 }
 
-function getAllByCol(col,res,next){
-	const search = ShelfRepository.read.getAllByCol(col);
-	return response.json(search,res,next);
+function getAllByCol(col){
+	const search = Shelf.where({col: col}).fetchAll({withRelated: ['bookcase']});
+	return search;
 }
 
-function getByRowAndCol(row,col,res,next){
-	const search = ShelfRepository.read.getByRowAndCol(row,col);
-	return response.json(search,res,next);
+function getByRowAndCol(row,col){
+	const search = Shelf.where({row: row, col: col}).fetch({withRelated: ['bookcase']});
+	return search;
 }
 
-function getAllFromBookcase(bookcase,res,next){
-	const search = ShelfRepository.read.getAllFromBookcase(bookcase);
-	return response.json(search,res,next);
+function getAllFromBookcase(bookcase){
+	const search = Shelf.where({id_bookcase: bookcase}).fetchAll({withRelated: ['bookcase']});
+	return search;
 }
 
-function create(shelf,res,next){
-	const save = ShelfRepository.create(shelf);
-	return response.json(save,res,next);
+function create(shelf){
+	const save = new Shelf(shelf).save();
+	return save;
 }
 
-function update(shelf,res,next){
-	const update = ShelfRepository.update(shelf);
-	return response.json(update,res,next);
+function update(shelf){
+	const update = new Shelf({id: shelf.id}).save(shelf,{patch: true});
+	return update;
 }
 
-function remove(shelf,res,next){
-	const remove = ShelfRepository.remove(shelf);
-	return response.json(remove,res,next);
+function remove(shelf){
+	const remove = Shelf.where({id: shelf}).destroy();
+	return remove;
 }
 
 module.exports = {

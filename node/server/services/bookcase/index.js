@@ -1,41 +1,40 @@
 'use strict';
 
-const BookcaseRepository = require('../../repository/bookcase');
-const response = require('../');
+const Bookcase = require('../').Bookcase;
 
-function getAll(res,next){
-	const search = BookcaseRepository.read.getAll();
-	return response.json(search,res,next);
+function getAll(){
+	const search = Bookcase.fetchAll();
+	return search;
 }
 
-function getById(id,res,next){
-	const search = BookcaseRepository.read.getById(id);
-	return response.json(search,res,next);
+function getById(id){
+	const search = Bookcase.where({id: id}).fetch();
+	return search;
 }
 
-function getByName(name,res,next){
-	const search = BookcaseRepository.read.getByName(name);
-	return response.json(search,res,next);
+function getByName(name){
+	const search = Bookcase.where({name: name}).fetch();
+	return search;
 }
 
-function getAllByName(name,res,next){
-	const search = BookcaseRepository.read.getAllByName(name);
-	return response.json(search,res,next);
+function getAllByName(name){
+	const search = Bookcase.where('name', 'like', `%${name}%`).fetchAll();
+	return search;
 }
 
-function create(bookcase,res,next){
-	const save = BookcaseRepository.create(bookcase);
-	return response.json(save,res,next);
+function create(bookcase){
+	const save = new Bookcase(bookcase).save();
+	return save;
 }
 
-function update(bookcase,res,next){
-	const update = BookcaseRepository.update(bookcase);
-	return response.json(update,res,next);
+function update(bookcase){
+	const update = new Bookcase({id: bookcase.id}).save(bookcase,{patch: true});
+	return update;
 }
 
-function remove(bookcase,res,next){
-	const remove = BookcaseRepository.remove(bookcase);
-	return response.json(remove,res,next);
+function remove(bookcase){
+	const remove = Bookcase.where({id: bookcase}).destroy();
+	return remove;
 }
 
 module.exports = {

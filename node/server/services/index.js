@@ -1,14 +1,11 @@
 'use strict';
 
-function json(param,res,next) {
-	param.then(function(model) {
-		res.json(model);
-	})
-		.catch(function(err) {
-			return next(new Error(err));
-		});
-}
+const Book = require('../models/Book');
+const Shelf = require('../models/Shelf');
+const Bookcase = require('../models/Bookcase');
 
 module.exports = {
-	json
+	Book,
+	Shelf,
+	Bookcase
 };

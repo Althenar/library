@@ -12,7 +12,8 @@ const settings = {
 			port: '3306',
 			charset  : 'utf8'
 		}
-	}
+	},
+	apiKey: 'vqiDyOjwahioB6ALBvIt8w&q'
 };
 
 module.exports = settings;

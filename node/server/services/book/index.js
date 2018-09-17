@@ -1,51 +1,50 @@
 'use strict';
 
-const BookRepository = require('../../repository/book');
-const response = require('../');
+const Book = require('../').Book;
 
-function getAll(res,next){
-	const search = BookRepository.read.getAll();
-	return response.json(search,res,next);
+function getAll(){
+	const search = Book.fetchAll({withRelated: ['shelf.bookcase']});
+	return search;
 }
 
-function getById(id,res,next) {
-	const search = BookRepository.read.getById(id);
-	return response.json(search,res,next);
+function getById(id) {
+	const search = Book.where({id: id}).fetch({withRelated: ['shelf.bookcase']});
+	return search;
 }
 
-function getByISBN(isbn,res,next) {
-	const search = BookRepository.read.getByISBN(isbn);
-	return response.json(search,res,next);
+function getByISBN(isbn) {
+	const search = Book.where({isbn: isbn}).fetch({withRelated: ['shelf.bookcase']});
+	return search;
 }
 
-function getAllByAuthor(author,res,next) {
-	const search = BookRepository.read.getAllByAuthor(author);
-	return response.json(search,res,next);
+function getAllByAuthor(author) {
+	const search = Book.where('author', 'like', `%${author}%`).fetchAll({withRelated: ['shelf.bookcase']});
+	return search;
 }
 
-function getAllByName(name,res,next){
-	const search = BookRepository.read.getAllByName(name);
-	return response.json(search,res,next);
+function getAllByName(name){
+	const search = Book.where('title', 'like', `%${name}%`).fetchAll({withRelated:['shelf.bookcase']});
+	return search;
 }
 
-function getAllFromShelf(shelf,res,next){
-	const search = BookRepository.read.getAllFromShelf(shelf);
-	return response.json(search,res,next);
+function getAllFromShelf(shelf){
+	const search = Book.where({id_shelf: shelf}).fetchAll();
+	return search;
 }
 
-function create(book,res,next){
-	const save = BookRepository.create(book);
-	return response.json(save,res,next);
+function create(book){
+	const save = new Book(book).save();
+	return save;
 }
 
-function update(book,res,next){
-	const update = BookRepository.update(book);
-	return response.json(update,res,next);
+function update(book){
+	const update = new Book({id: book.id}).save(book,{patch: true});
+	return update;
 }
 
-function remove(book,res,next){
-	const remove = BookRepository.remove(book);
-	return response.json(remove,res,next);
+function remove(book){
+	const remove = Book.where({id: book}).destroy();
+	return remove;
 }
 
 module.exports = {
