@@ -1,9 +1,12 @@
 'use strict';
 
 const
-	apiRoute = require('./api');
-	//homeRoute = require('./home'),
-	//errorRoute = require('./error');
+	apiRoute = require('./api'),
+	userRoute = require('./user'),
+	homeRoute = require('./home'),
+	swaggerUi = require('swagger-ui-express'),
+	YAML = require('yamljs'),
+	swaggerDocument = YAML.load('./server/swagger.yaml');
 
 function init(server) {
 	server.get('*', function (req, res, next) {
@@ -16,8 +19,9 @@ function init(server) {
 	});
 
 	server.use('/api', apiRoute);
-	//server.use('/home', homeRoute);
-	//server.use('/error', errorRoute);
+	server.use('/home', homeRoute);
+	server.use('/user', userRoute);
+	server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
 module.exports = {

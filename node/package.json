@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./"
+    "start": "nodemon ./"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -12,6 +12,7 @@
     "bookshelf-registry": "^1.0.0",
     "bookshelf-validate": "^2.0.3",
     "cookie-parser": "~1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
@@ -19,6 +20,9 @@
     "lodash": "^4.17.10",
     "morgan": "~1.9.0",
     "mysql": "^2.16.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth20": "^1.0.0",
     "pug": "2.0.0-beta11",
     "swagger-ui-express": "^4.0.0",
     "validator": "^10.7.0",

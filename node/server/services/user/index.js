@@ -12,13 +12,18 @@ function getById(id){
 	return search;
 }
 
-function getByProviderId(idByProvider) {
+function getByIdByProvider(idByProvider) {
 	const search = User.where({idByProvider: idByProvider}).fetch({withRelated: 'role'});
 	return search;
 }
 
 function getAllByProvider(provider) {
-	const search = User.where('provider', 'like', `%${provider}%`).fetchAll({withRelated: 'role'});
+	const search = User.where({provider: provider}).fetchAll({withRelated: 'role'});
+	return search;
+}
+
+function getByProviderAndIdByProvider(provider, idByProvider){
+	const search = User.where({provider: provider, idByProvider: idByProvider}).fetchAll({withRelated: 'role'});
 	return search;
 }
 
@@ -52,8 +57,9 @@ module.exports = {
 	read: {
 		getAll,
 		getById,
-		getByProviderId,
+		getByIdByProvider,
 		getAllByProvider,
+		getByProviderAndIdByProvider,
 		getAllByName,
 		getAllByRole
 	},

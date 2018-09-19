@@ -1,0 +1,115 @@
+swagger: "2.0"
+
+info:
+  description: A simple API to track location of books
+  title: AlthSoft Library tracker
+  version: '1.0'
+  contact:
+      email: r@zxcv.pl
+      url: http://zxcv.pl
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+
+host: 'localhost:3000'
+
+basePath: /api
+
+schemes:
+- 'https'
+- 'http'
+
+consumes: 
+- application/json
+
+produces: 
+- application/json
+
+paths:
+
+  /book:
+    post:
+      description: Creates a new book
+      operationId: BookController.create
+      produces:
+        - application/json
+      parameters:
+        - name: book
+          in: body
+          description: book json
+          required: true
+          schema:
+            $ref: '#/definitions/newBook'
+      responses:
+        '200':
+          description: returns book json
+          schema:
+            $ref: '#/definitions/book'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+
+definitions:
+  book:
+    type: object
+    required:
+      - id
+      - isbn
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 1
+      isbn:
+        type: string
+        example: '830211124'
+      author:
+        type: string
+        example: 'Example Author'
+      title:
+        type: string
+        example: 'Example Title'
+      id_shelf:
+        type: integer
+        format: int64
+        example: 2
+
+  newBook:
+    type: object
+    required:
+      - id_shelf
+      - isbn
+    properties:
+      id_shelf:
+        type: integer
+        format: int64
+        example: 2
+      isbn:
+        type: string
+        example: '830211124'
+      author:
+        type: string
+        example: 'Example Author'
+      title:
+        type: string
+        example: 'Example Title'
+
+  errorModel:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+        example: 404
+      message:
+        type: string
+        example: '404 - Not Found'
+
+externalDocs:
+  description: Github
+  url: https://github.com/Althenar/library

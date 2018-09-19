@@ -3,7 +3,9 @@
 const
 	express = require('express'),
 	logger = require('morgan'),
-	cookieParser = require('cookie-parser');
+	cookieParser = require('cookie-parser'),
+	passport = require('../configs/passport'),
+	cookieSession = require('cookie-session');
 
 module.exports = function() {
 
@@ -12,6 +14,7 @@ module.exports = function() {
 	const create = function(config) {
 
 		const routes = require('./routes/index');
+		const cookieSettings = require('../configs/settings').cookieSettings;
 
 		server.set('env', config.env);
 		server.set('port', config.port);
@@ -23,8 +26,14 @@ module.exports = function() {
 		server.use(express.urlencoded({ extended: false }));
 		server.use(cookieParser());
 
+		server.use(cookieSession(cookieSettings));
+
 		server.set('views', server.get('viewDir'));
 		server.set('view engine', 'pug');
+
+		server.use(passport.initialize());
+		server.use(passport.session());
+
 
 		routes.init(server);
 	};
