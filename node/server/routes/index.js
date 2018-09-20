@@ -3,6 +3,7 @@
 const
 	apiRoute = require('./api'),
 	userRoute = require('./user'),
+	authRoutes = require('./auth'),
 	homeRoute = require('./home'),
 	swaggerUi = require('swagger-ui-express'),
 	YAML = require('yamljs'),
@@ -21,6 +22,7 @@ function init(server) {
 	server.use('/api', apiRoute);
 	server.use('/home', homeRoute);
 	server.use('/user', userRoute);
+	server.use('/auth', authRoutes);
 	server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

@@ -4,24 +4,24 @@ const passport = require('passport');
 const UserService = require('../../server/services/user');
 
 const
-	google = require('./google-OAuth'),
-	facebook = require('./facebook-OAuth');
+	google = require('./google-OAuth');
+	//facebook = require('./facebook-OAuth');
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
 	done(null, user.id);
 });
 
 
-passport.deserializeUser(function (id, done) {
-	UserService.read.getById(id).then(function(user) {
-		done(null, user);
-	}).catch(function(err) {
-		return done(new Error(err), null);
-	});
+passport.deserializeUser((id, done) => {
+	UserService.read.getById(id)
+		.then((user) => {
+			done(null, user);
+		}).catch((err) => {
+			return done(err, null);
+		});
 });
 
-
 passport.use(google);
-passport.use(facebook);
+//passport.use(facebook);
 
 module.exports = passport;

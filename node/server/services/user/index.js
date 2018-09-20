@@ -23,7 +23,7 @@ function getAllByProvider(provider) {
 }
 
 function getByProviderAndIdByProvider(provider, idByProvider){
-	const search = User.where({provider: provider, idByProvider: idByProvider}).fetchAll({withRelated: 'role'});
+	const search = User.where({provider: provider, idByProvider: idByProvider}).fetch({withRelated: 'role'});
 	return search;
 }
 

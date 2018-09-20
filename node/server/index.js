@@ -5,7 +5,7 @@ const
 	logger = require('morgan'),
 	cookieParser = require('cookie-parser'),
 	passport = require('../configs/passport'),
-	cookieSession = require('cookie-session');
+	session = require('cookie-session');
 
 module.exports = function() {
 
@@ -26,7 +26,7 @@ module.exports = function() {
 		server.use(express.urlencoded({ extended: false }));
 		server.use(cookieParser());
 
-		server.use(cookieSession(cookieSettings));
+		server.use(session(cookieSettings));
 
 		server.set('views', server.get('viewDir'));
 		server.set('view engine', 'pug');
