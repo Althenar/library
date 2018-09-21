@@ -20,7 +20,7 @@ const settings = {
 		clientSecret: 'tl1EtqxM2KOIXdxeb4x-6ljP'
 	},
 	facebook: {
-		callbackURL: '/auth/facebook/redirect',
+		callbackURL: '/auth/facebook/callback',
 		clientID: '1233420446798773',
 		clientSecret: '3ed8b930f2ffb7939153ca347bae9abe'
 	},

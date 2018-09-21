@@ -1,21 +1,23 @@
 'use strict';
 
 const
+	YAML = require('yamljs'),
+	swaggerUi = require('swagger-ui-express'),
+	swaggerDocument = YAML.load('./server/swagger.yaml');
+
+const
 	apiRoute = require('./api'),
 	userRoute = require('./user'),
 	authRoutes = require('./auth'),
-	homeRoute = require('./home'),
-	swaggerUi = require('swagger-ui-express'),
-	YAML = require('yamljs'),
-	swaggerDocument = YAML.load('./server/swagger.yaml');
+	homeRoute = require('./home');
 
-function init(server) {
-	server.get('*', function (req, res, next) {
+const init = (server) => {
+	server.get('*', (req, res, next) => {
 		console.log(`Request was made to: ${req.originalUrl}`);
 		return next();
 	});
 
-	server.get('/', function (req, res) {
+	server.get('/', (req, res) => {
 		res.redirect('/api/book');
 	});
 
@@ -24,8 +26,8 @@ function init(server) {
 	server.use('/user', userRoute);
 	server.use('/auth', authRoutes);
 	server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-}
+};
 
 module.exports = {
-	init: init
+	init
 };

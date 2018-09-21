@@ -1,7 +1,7 @@
 'use strict';
 
 function login(req, res) {
-	res.json(req.user);
+	res.json('/google or /facebook');
 }
 
 function logout(req, res) {
@@ -10,7 +10,7 @@ function logout(req, res) {
 }
 
 function auth(req, res) {
-	res.json('logged in with google');
+	res.json(`logged in with ${req.user.provider}`);
 }
 
 module.exports = {

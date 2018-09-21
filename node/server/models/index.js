@@ -5,7 +5,7 @@ const knex = require('knex')(settings.database);
 const bookshelf = require('bookshelf')(knex);
 const validator = require('validator');
 
-validator.isRequired = function (value) {
+validator.isRequired = (value) => {
 	if (value) return true;
 	return false;
 };

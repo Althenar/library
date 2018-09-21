@@ -5,13 +5,18 @@ const
 	logger = require('morgan'),
 	cookieParser = require('cookie-parser'),
 	passport = require('../configs/passport'),
-	session = require('cookie-session');
+	session = require('cookie-session'),
+	https = require('https'),
+	fs = require('fs');
 
-module.exports = function() {
+const key = fs.readFileSync('configs/encryption/key.pem', 'utf8');
+const cert = fs.readFileSync('configs/encryption/server.crt', 'utf8');
+
+module.exports = () => {
 
 	const server = express();
 
-	const create = function(config) {
+	const create = (config) => {
 
 		const routes = require('./routes/index');
 		const cookieSettings = require('../configs/settings').cookieSettings;
@@ -38,14 +43,18 @@ module.exports = function() {
 		routes.init(server);
 	};
 
-	const start = function() {
+	const start = () => {
 
 		const hostname = server.get('hostname'),
 			port = server.get('port');
 
-		server.listen(port, function () {
+		server.listen(port, () => {
 			console.log(`Express server listening on - http://${hostname}:${port}/`);
 		});
+		https.createServer({
+			key: key,
+			cert: cert
+		}, server).listen(443);
 	};
 
 	return {

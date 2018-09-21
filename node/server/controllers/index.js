@@ -1,14 +1,14 @@
 'use strict';
 
-function json(param,res,next) {
-	param.then(function(model) {
+const json = (param,res,next) => {
+	param.then((model) => {
 		res.json(model);
 	})
-		.catch(function(err) {
+		.catch((err) => {
 			return next(new Error(err));
 		});
-}
+};
 
 module.exports = {
-	json
+	json,
 };

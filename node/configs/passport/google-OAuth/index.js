@@ -9,7 +9,7 @@ module.exports = new GoogleStrategy(googleKey,
 		UserService.read.getByProviderAndIdByProvider(profile.provider, profile.id)
 			.then((currentUser) => {
 				if (currentUser)
-					done(null, currentUser);
+					done(null, currentUser.toJSON());
 				else {
 					const user = {
 						name: profile.displayName,
@@ -17,9 +17,10 @@ module.exports = new GoogleStrategy(googleKey,
 						idByProvider: profile.id
 					};
 
-					UserService.create(user);
-
-					done(null, user);
+					UserService.create(user)
+						.then((newUser) => {
+							done(null, newUser.toJSON());
+						});
 				}
 			});
 	}
