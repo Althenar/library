@@ -1,16 +1,16 @@
 'use strict';
 
 function login(req, res) {
-	res.json('/google or /facebook');
+    res.render('login', { user: req.user });
 }
 
 function logout(req, res) {
-	req.logout();
-	res.json('logged out');
+    req.logout();
+    res.redirect('/');
 }
 
 function auth(req, res) {
-	res.json(`logged in with ${req.user.provider}`);
+	res.json('logged in with google');
 }
 
 module.exports = {

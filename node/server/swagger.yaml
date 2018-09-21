@@ -28,18 +28,22 @@ produces:
 paths:
 
   /book:
+
     post:
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
       description: Creates a new book
-      operationId: BookController.create
+
       produces:
-        - application/json
+      - application/json
       parameters:
-        - name: book
-          in: body
-          description: book json
-          required: true
-          schema:
-            $ref: '#/definitions/newBook'
+      - name: book
+        in: body
+        description: book json
+        required: true
+        schema:
+          $ref: '#/definitions/newBook'
       responses:
         '200':
           description: returns book json
@@ -50,13 +54,12 @@ paths:
           schema:
             $ref: '#/definitions/errorModel'
 
-
 definitions:
   book:
     type: object
     required:
-      - id
-      - isbn
+    - id
+    - isbn
     properties:
       id:
         type: integer
@@ -79,8 +82,8 @@ definitions:
   newBook:
     type: object
     required:
-      - id_shelf
-      - isbn
+    - id_shelf
+    - isbn
     properties:
       id_shelf:
         type: integer
@@ -99,8 +102,8 @@ definitions:
   errorModel:
     type: object
     required:
-      - code
-      - message
+    - code
+    - message
     properties:
       code:
         type: integer
