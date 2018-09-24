@@ -11,13 +11,12 @@ info:
     name: MIT
     url: http://opensource.org/licenses/MIT
 
-host: 'localhost:3000'
+host: 'localhost:443'
 
 basePath: /api
 
 schemes:
 - 'https'
-- 'http'
 
 consumes: 
 - application/json
@@ -28,22 +27,18 @@ produces:
 paths:
 
   /book:
-
     post:
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
       description: Creates a new book
-
+      operationId: create
       produces:
-      - application/json
+        - application/json
       parameters:
-      - name: book
-        in: body
-        description: book json
-        required: true
-        schema:
-          $ref: '#/definitions/newBook'
+        - name: book
+          in: body
+          description: book json
+          required: true
+          schema:
+            $ref: '#/definitions/newBook'
       responses:
         '200':
           description: returns book json
@@ -58,8 +53,8 @@ definitions:
   book:
     type: object
     required:
-    - id
-    - isbn
+      - id
+      - isbn
     properties:
       id:
         type: integer
@@ -82,8 +77,8 @@ definitions:
   newBook:
     type: object
     required:
-    - id_shelf
-    - isbn
+      - id_shelf
+      - isbn
     properties:
       id_shelf:
         type: integer
@@ -102,8 +97,8 @@ definitions:
   errorModel:
     type: object
     required:
-    - code
-    - message
+      - code
+      - message
     properties:
       code:
         type: integer

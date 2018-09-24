@@ -9,17 +9,23 @@ function getAll(req, res, next){
 	return response.json(search, res, next);
 }
 
-function getById(req, res, next) {
+function getById(req, res, next){
 	const search = BookService.read.getById(req.params.id);
 	return response.json(search, res, next);
 }
 
-function getByISBN(req, res, next) {
+function getAllBorrowed(req, res, next) {
+	const search = BookService.read.getAllBorrowed();
+	return response.json(search, res, next);
+
+}
+
+function getByISBN(req, res, next){
 	const search = BookService.read.getByISBN(req.params.isbn);
 	return response.json(search, res, next);
 }
 
-function getAllByAuthor(req, res, next) {
+function getAllByAuthor(req, res, next){
 	const search = BookService.read.getAllByAuthor(req.params.name);
 	return response.json(search, res, next);
 }
@@ -73,6 +79,7 @@ module.exports = {
 	read: {
 		getAll,
 		getById,
+		getAllBorrowed,
 		getByISBN,
 		getAllByAuthor,
 		getAllByName,

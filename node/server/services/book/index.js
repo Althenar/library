@@ -7,17 +7,22 @@ function getAll(){
 	return search;
 }
 
-function getById(id) {
+function getById(id){
 	const search = Book.where({id: id}).fetch({withRelated: ['shelf.bookcase']});
 	return search;
 }
 
-function getByISBN(isbn) {
+function getAllBorrowed(){
+	const search = Book.where({borrowed: true}).fetchAll({withRelated: ['shelf.bookcase']});
+	return search;
+}
+
+function getByISBN(isbn){
 	const search = Book.where({isbn: isbn}).fetch({withRelated: ['shelf.bookcase']});
 	return search;
 }
 
-function getAllByAuthor(author) {
+function getAllByAuthor(author){
 	const search = Book.where('author', 'like', `%${author}%`).fetchAll({withRelated: ['shelf.bookcase']});
 	return search;
 }
@@ -52,6 +57,7 @@ module.exports = {
 	read: {
 		getAll,
 		getById,
+		getAllBorrowed,
 		getByISBN,
 		getAllByAuthor,
 		getAllByName,
