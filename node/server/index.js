@@ -48,13 +48,12 @@ module.exports = () => {
 		const hostname = server.get('hostname'),
 			port = server.get('port');
 
-		server.listen(port, () => {
-			console.log(`Express server listening on - http://${hostname}:${port}/`);
-		});
 		https.createServer({
 			key: key,
 			cert: cert
-		}, server).listen(443);
+		}, server).listen(port, () => {
+			console.log(`Express server listening on - https://${hostname}:${port}/`);
+		});
 	};
 
 	return {

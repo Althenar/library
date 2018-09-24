@@ -11,13 +11,12 @@ info:
     name: MIT
     url: http://opensource.org/licenses/MIT
 
-host: 'localhost:3000'
+host: 'localhost:443'
 
 basePath: /api
 
 schemes:
 - 'https'
-- 'http'
 
 consumes: 
 - application/json
@@ -30,7 +29,7 @@ paths:
   /book:
     post:
       description: Creates a new book
-      operationId: BookController.create
+      operationId: create
       produces:
         - application/json
       parameters:
@@ -49,7 +48,6 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
-
 
 definitions:
   book:

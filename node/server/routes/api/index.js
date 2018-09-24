@@ -1,6 +1,6 @@
 'use strict';
 
-const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+//const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 const
 	bookRoute = require('./book'),
@@ -10,7 +10,7 @@ const
 
 const router = express.Router();
 
-router.use('/book', ensureLoggedIn('/auth/login'), bookRoute);
+router.use('/book',/* ensureLoggedIn('/auth/login'),*/ bookRoute);
 router.use('/shelf', shelfRoute);
 router.use('/bookcase', bookcaseRoute);
 

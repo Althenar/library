@@ -2,7 +2,7 @@
 
 const localConfig = {
 	hostname: 'localhost',
-	port: 3000,
+	port: 443,
 	viewDir: './app/views'
 };
 
