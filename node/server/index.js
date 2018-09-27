@@ -7,7 +7,6 @@ const
 	passport = require('../configs/passport'),
 	session = require('cookie-session'),
 	https = require('https'),
-    cors = require('cors'),
 	fs = require('fs');
 
 const key = fs.readFileSync('configs/encryption/key.pem', 'utf8');
@@ -40,41 +39,6 @@ module.exports = () => {
 		server.use(passport.initialize());
 		server.use(passport.session());
 
-
-        server.use(cors({
-            'allowedHeaders': ['sessionId', 'Content-Type'],
-            'exposedHeaders': ['sessionId'],
-            'origin': '*',
-            'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
-            'preflightContinue': false
-        }));
-
-        server.all('/*', function(req, res, next) {
-            var oneof = false;
-            if(req.headers.origin) {
-                res.header('Access-Control-Allow-Origin', req.headers.origin);
-                oneof = true;
-            }
-            if(req.headers['access-control-request-method']) {
-                res.header('Access-Control-Allow-Methods', req.headers['access-control-request-method']);
-                oneof = true;
-            }
-            if(req.headers['access-control-request-headers']) {
-                res.header('Access-Control-Allow-Headers', req.headers['access-control-request-headers']);
-                oneof = true;
-            }
-            if(oneof) {
-                res.header('Access-Control-Max-Age', 60 * 60 * 24 * 365);
-            }
-
-            // intercept OPTIONS method
-            if (oneof && req.method == 'OPTIONS') {
-                res.send(200);
-            }
-            else {
-                next();
-            }
-        });
 
 		routes.init(server);
 	};
