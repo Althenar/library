@@ -21,6 +21,8 @@ module.exports = () => {
 		const routes = require('./routes/index');
 		const cookieSettings = require('../configs/settings').cookieSettings;
 
+
+
 		server.set('env', config.env);
 		server.set('port', config.port);
 		server.set('hostname', config.hostname);
@@ -38,7 +40,6 @@ module.exports = () => {
 
 		server.use(passport.initialize());
 		server.use(passport.session());
-
 
 		routes.init(server);
 	};
