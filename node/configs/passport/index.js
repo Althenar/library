@@ -14,7 +14,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
 	UserService.read.getById(id)
 		.then((user) => {
-			done(null, user);
+			done(null, user.toJSON());
 		}).catch((err) => {
 			return done(err, null);
 		});

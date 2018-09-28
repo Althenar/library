@@ -1,21 +1,22 @@
 'use strict'; 
 
 const router = require('express').Router();
+const permission = require('permission');
 
 const BookcaseController = require('../../../controllers/bookcase');
 
-router.get('/', BookcaseController.read.getAll);
+router.get('/', permission(['user', 'admin']), BookcaseController.read.getAll);
 
-router.get('/:id', BookcaseController.read.getById);
+router.get('/:id', permission(['user', 'admin']), BookcaseController.read.getById);
 
-router.get('/name/:name', BookcaseController.read.getByName);
+router.get('/name/:name', permission(['user', 'admin']), BookcaseController.read.getByName);
 
-router.get('/search/:name', BookcaseController.read.getAllByName);
+router.get('/search/:name', permission(['user', 'admin']), BookcaseController.read.getAllByName);
 
-router.post('/', BookcaseController.create);
+router.post('/', permission(['admin']), BookcaseController.create);
 
-router.put('/:id', BookcaseController.update);
+router.put('/:id', permission(['admin']), BookcaseController.update);
 
-router.delete('/:id', BookcaseController.remove);
+router.delete('/:id', permission(['admin']), BookcaseController.remove);
 
 module.exports = router;

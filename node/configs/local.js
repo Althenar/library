@@ -2,8 +2,7 @@
 
 const localConfig = {
 	hostname: 'localhost',
-	port: 443,
-	viewDir: './app/views'
+	port: 443
 };
 
 module.exports = localConfig;

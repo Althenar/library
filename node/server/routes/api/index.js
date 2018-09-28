@@ -1,17 +1,18 @@
 'use strict';
 
-//const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
-
 const
 	bookRoute = require('./book'),
 	shelfRoute = require('./shelf'),
 	bookcaseRoute = require('./bookcase'),
-	express = require('express');
+	userRoute = require('./user'),
+	borrowRoute = require('./borrow');
 
-const router = express.Router();
+const router = require('express').Router();
 
-router.use('/book',/* ensureLoggedIn('/auth/login'),*/ bookRoute);
+router.use('/book', bookRoute);
+router.use('/borrow', borrowRoute);
 router.use('/shelf', shelfRoute);
 router.use('/bookcase', bookcaseRoute);
+router.use('/user', userRoute);
 
 module.exports = router;

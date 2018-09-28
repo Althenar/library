@@ -26,7 +26,6 @@ module.exports = () => {
 		server.set('env', config.env);
 		server.set('port', config.port);
 		server.set('hostname', config.hostname);
-		server.set('viewDir', config.viewDir);
 
 		server.use(express.json());
 		server.use(logger('dev'));
@@ -34,9 +33,6 @@ module.exports = () => {
 		server.use(cookieParser());
 
 		server.use(session(cookieSettings));
-
-		server.set('views', server.get('viewDir'));
-		server.set('view engine', 'pug');
 
 		server.use(passport.initialize());
 		server.use(passport.session());

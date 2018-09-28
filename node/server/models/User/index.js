@@ -2,12 +2,12 @@
 
 const db = require('../index');
 
-require('../Role');
+require('../Borrow');
 
 const User = db.model('User',{
 	tableName: 'user',
-	role: function() {
-		return this.hasOne('Role','id','id_role');
+	borrowed: function (){
+		return this.hasMany('Borrow', 'id_user', 'id');
 	},
 	validations: {
 		name: 'isRequired',

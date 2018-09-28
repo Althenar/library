@@ -5,6 +5,7 @@ const response = require('../');
 
 function getAll(req, res, next){
 	const search = UserService.read.getAll();
+	console.log(req.user);
 	return response.json(search, res, next);
 }
 
@@ -34,7 +35,7 @@ function getAllByName(req, res, next){
 }
 
 function getAllByRole(req, res, next){
-	const search = UserService.read.getAllByRole(req.params.id);
+	const search = UserService.read.getAllByRole(req.params.role);
 	return response.json(search, res, next);
 }
 
