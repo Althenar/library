@@ -8,7 +8,7 @@ function getAll(){
 }
 
 function getById(id){
-	const search = User.where({id: id}).fetch({withRelated: ['borrowed.book']});
+	const search = User.where({id: id}).fetch({withRelated: ['borrowed.book', 'queue.book']});
 	return search;
 }
 
