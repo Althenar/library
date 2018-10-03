@@ -12,11 +12,6 @@ const Borrow = db.model('Borrow',{
 	},
 	book: function() {
 		return this.hasOne('Book', 'id', 'id_book');
-	},
-	validations: {
-		id_user: 'isRequired',
-		id_book: 'isRequired',
-		borrowDate: 'isRequired'
 	}
 });
 
