@@ -1,7 +1,7 @@
 'use strict';
 
 const
-	server = require('./server')(),
+	server = require('./server'),
 	config = require('./configs');
 
 server.create(config);

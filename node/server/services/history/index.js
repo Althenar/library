@@ -1,10 +1,10 @@
 'use strict';
 
 const 
-	Borrow = require('../').Borrow;
+	History = require('../').History;
 
 function getAll(){
-	const search = Borrow.fetchAll({
+	const search = History.fetchAll({
 		withRelated: [
 			'user', 
 			'book'
@@ -15,7 +15,7 @@ function getAll(){
 }
 
 function getById(id){
-	const search = Borrow.where({
+	const search = History.where({
 		id: id
 	}).fetch({
 		withRelated: [
@@ -27,25 +27,25 @@ function getById(id){
 	return search;
 }
 
-function getByBookId(id){
-	const search = Borrow.where({
+function getAllByBookId(id){
+	const search = History.where({
 		id_book: id
-	}).fetch({
+	}).fetchAll({
 		withRelated: ['user']
 	});
-	
+
 	return search;
 }
 
 function getAllByBookTitle(bookTitle){
-	const search = Borrow.query((qb) => {
+	const search = History.query((qb) => {
 		qb.leftJoin(
 			'book',
-			'borrow.id_book',
+			'history.id_book',
 			'book.id'
 		).andWhere('title', 'like', `%${bookTitle}%`)
 			.select(
-				'borrow.*',
+				'history.*',
 				'book.title as book_title',
 				'book.author as book_author',
 				'book.isbn as book_isbn'
@@ -58,24 +58,24 @@ function getAllByBookTitle(bookTitle){
 }
 
 function getAllByUserId(id){
-	const search = Borrow.where({
+	const search = History.where({
 		id_user: id
 	}).fetchAll({
 		withRelated: ['book']
 	});
-	
+
 	return search;
 }
 
 function getAllByUserName(userName){
-	const search = Borrow.query((qb) => {
+	const search = History.query((qb) => {
 		qb.leftJoin(
 			'user',
-			'borrow.id_user',
+			'history.id_user',
 			'user.id'
 		).andWhere('name', 'like', `%${userName}%`)
 			.select(
-				'borrow.*',
+				'history.*',
 				'user.name as borrowedBy'
 			);
 	}).fetchAll({
@@ -86,56 +86,58 @@ function getAllByUserName(userName){
 }
 
 function getAllFromDateTillDate(fromDate, tillDate){
-	const search = Borrow.query((qb) => {
-		qb.where('borrowDate', '>=', fromDate)
-			.andWhere('borrowDate', '<=', tillDate);
+	const search = History.query((qb) => {
+		qb.where('returnDate', '>=', fromDate)
+			.andWhere('returnDate', '<=', tillDate);
 	}).fetchAll({
 		withRelated: [
 			'user', 
 			'book'
 		]
 	});
-	
+
 	return search;
 }
 
 function getAllFromDate(fromDate){
-	const search = Borrow.where('borrowDate', '>=', fromDate)
+	const search = History.where('returnDate', '>=', fromDate)
 		.fetchAll({
 			withRelated: [
 				'user', 
 				'book'
 			]
 		});
-	
+
 	return search;
 }
 
-function create(borrow){
-	const save = new Borrow(borrow).save();
-	
-	return save;
-}
-
-function returnBook(id_book){
-	const remove = Borrow.where({
-		id_book: id_book
+function remove(id){
+	const remove = History.where({
+		id: id
 	}).destroy();
 
 	return remove;
 }
 
+function removeOlderThan(date){
+	const remove = History.where('returnDate', '<', date).destroy();
+	
+	return remove;
+}
+
 module.exports = {
-	create,
 	read: {
 		getAll,
 		getById,
-		getByBookId,
+		getAllByBookId,
 		getAllByBookTitle,
 		getAllByUserId,
 		getAllByUserName,
 		getAllFromDateTillDate,
 		getAllFromDate
 	},
-	returnBook
+	remove: {
+		remove,
+		removeOlderThan
+	}
 };

@@ -1,8 +1,11 @@
 'use strict';
 
-const axios = require('axios');
-const parser = require('xml2js').parseString;
-const key = require('../../../../configs/settings').apiKey;
+const 
+	axios = require('axios'),
+	parser = require('xml2js').parseString;
+
+const 
+	key = require('../../../../configs/settings').apiKey;
 
 function getBookDataByISBN(isbn){
 	return axios.get(`https://www.goodreads.com/search.xml?key=${key}=${isbn}`)

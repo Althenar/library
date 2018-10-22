@@ -1,9 +1,12 @@
 'use strict';
 
-const settings = require('../../configs/settings');
-const knex = require('knex')(settings.database);
-const bookshelf = require('bookshelf')(knex);
-const validator = require('validator');
+const 
+	settings = require('../../configs/settings');
+
+const 
+	knex = require('knex')(settings.database),
+	bookshelf = require('bookshelf')(knex),
+	validator = require('validator');
 
 validator.isRequired = (value) => {
 	if (value) return true;

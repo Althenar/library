@@ -1,30 +1,36 @@
 'use strict';
 
-const ShelfService = require('../../services/shelf');
-const response = require('../');
+const 
+	ShelfService = require('../../services/shelf'),
+	response = require('../');
 
 function getAll(req, res, next){
 	const search = ShelfService.read.getAll();
+
 	return response.json(search, res, next);
 }
 
 function getById(req, res, next){
 	const search = ShelfService.read.getById(req.params.id);
+
 	return response.json(search, res, next);
 }
 
 function getAllByRow(req, res, next){
 	const search = ShelfService.read.getAllByRow(req.params.row);
+
 	return response.json(search, res, next);
 }
 
 function getAllByCol(req, res, next){
 	const search = ShelfService.read.getAllByCol(req.params.col);
+
 	return response.json(search, res, next);
 }
 
 function getByRowAndCol(req, res, next){
-	const search = ShelfService.read.getByRowAndCol(req.params.row, req.params.col);
+	const search = ShelfService.read
+		.getByRowAndCol(req.params.row, req.params.col);
 	return response.json(search, res, next);
 }
 
@@ -58,6 +64,7 @@ function update(req, res, next){
 
 function remove(req, res, next){
 	const remove = ShelfService.remove(req.params.id);
+	
 	return response.json(remove, res, next);
 }
 

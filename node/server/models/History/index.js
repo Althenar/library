@@ -5,8 +5,8 @@ const db = require('../index');
 require('../User');
 require('../Book');
 
-const Borrow = db.model('Borrow', {
-	tableName: 'borrow',
+const History = db.model('History', {
+	tableName: 'history',
 	user: function() {
 		return this.hasOne('User','id','id_user');
 	},
@@ -15,4 +15,4 @@ const Borrow = db.model('Borrow', {
 	}
 });
 
-module.exports = Borrow;
+module.exports = History;

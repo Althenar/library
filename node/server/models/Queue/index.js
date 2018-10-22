@@ -5,7 +5,7 @@ const db = require('../index');
 require('../User');
 require('../Book');
 
-const Queue = db.model('Queue',{
+const Queue = db.model('Queue', {
 	tableName: 'queue',
 	user: function() {
 		return this.hasOne('User','id','id_user');
@@ -15,7 +15,7 @@ const Queue = db.model('Queue',{
 	},
 	validations: {
 		id_user: 'isRequired',
-		id_book: 'isRequired'
+		position: 'isRequired'
 	}
 });
 

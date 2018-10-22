@@ -1,42 +1,68 @@
 'use strict';
 
-const BookService = require('../../services/book');
-const externalData = require('../externalData');
-const response = require('../');
+const 
+	BookService = require('../../services/book'),
+	externalData = require('../externalData'),
+	response = require('../');
 
 function getAll(req, res, next){
 	const search = BookService.read.getAll();
+
 	return response.json(search, res, next);
 }
 
 function getById(req, res, next){
 	const search = BookService.read.getById(req.params.id);
+
 	return response.json(search, res, next);
 }
 
-function getAllBorrowed(req, res, next) {
+function getAllBorrowed(req, res, next){
 	const search = BookService.read.getAllBorrowed();
-	return response.json(search, res, next);
 
+	return response.json(search, res, next);
+}
+
+function getAllByUserThatBorrowed(req, res, next){
+	const search = BookService.read
+		.getAllByUserThatBorrowed(req.params.name);
+
+	return response.json(search, res, next);
+}
+
+function getAllInQueue(req, res, next){
+	const search = BookService.read.getAllInQueue();
+
+	return response.json(search, res, next);
 }
 
 function getByISBN(req, res, next){
 	const search = BookService.read.getByISBN(req.params.isbn);
+
 	return response.json(search, res, next);
 }
 
 function getAllByAuthor(req, res, next){
 	const search = BookService.read.getAllByAuthor(req.params.name);
+
 	return response.json(search, res, next);
 }
 
-function getAllByName(req, res, next){
-	const search = BookService.read.getAllByName(req.params.name);
+function getAllByTitle(req, res, next){
+	const search = BookService.read.getAllByTitle(req.params.title);
+
 	return response.json(search, res, next);
 }
 
 function getAllFromShelf(req, res, next){
 	const search = BookService.read.getAllFromShelf(req.params.id);
+
+	return response.json(search, res, next);
+}
+
+function getAllFromBookcase(req, res, next){
+	const search = BookService.read.getAllFromBookcase(req.params.id);
+
 	return response.json(search, res, next);
 }
 
@@ -52,8 +78,7 @@ async function create(req, res, next){
 		book = await externalData(book);
 
 	const save = BookService.create(book);
-	return response.json(save, res, next);
-	
+	return response.json(save, res, next);	
 }
 
 function update(req, res, next){
@@ -71,6 +96,7 @@ function update(req, res, next){
 
 function remove(req, res, next){
 	const remove = BookService.remove(req.params.id);
+
 	return response.json(remove, res, next);
 }
 
@@ -80,10 +106,13 @@ module.exports = {
 		getAll,
 		getById,
 		getAllBorrowed,
+		getAllByUserThatBorrowed,
+		getAllInQueue,
 		getByISBN,
 		getAllByAuthor,
-		getAllByName,
-		getAllFromShelf
+		getAllByTitle,
+		getAllFromShelf,
+		getAllFromBookcase
 	},
 	update,
 	remove

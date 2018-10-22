@@ -5,72 +5,72 @@ const
 	permission = require('permission');
 
 const 
-	BorrowController = require('../../../controllers/borrow');
+	HistoryController = require('../../../controllers/history');
 
 router.get(
 	'/', 
 	permission(['admin']), 
-	BorrowController.read.getAll
+	HistoryController.read.getAll
 );
 
 router.get(
 	'/user', 
 	permission(['user', 'admin']), 
-	BorrowController.read.getAllByCurrentUser
+	HistoryController.read.getAllByCurrentUser
 );
 
 router.get(
 	'/:id', 
 	permission(['admin']), 
-	BorrowController.read.getById
+	HistoryController.read.getById
 );
 
 router.get(
 	'/book/:id', 
 	permission(['admin']), 
-	BorrowController.read.getByBookId
+	HistoryController.read.getAllByBookId
 );
 
 router.get(
 	'/user/:id', 
 	permission(['admin']), 
-	BorrowController.read.getAllByUserId
+	HistoryController.read.getAllByUserId
 );
 
 router.get(
 	'/from/:date', 
 	permission(['admin']), 
-	BorrowController.read.getAllFromDate
+	HistoryController.read.getAllFromDate
 );
 
 router.get(
 	'/:fromDate/:tillDate', 
 	permission(['admin']), 
-	BorrowController.read.getAllFromDateTillDate
+	HistoryController.read.getAllFromDateTillDate
 );
 
 router.get(
 	'/book/title/:title',
 	permission(['admin']),
-	BorrowController.read.getAllByBookTitle
+	HistoryController.read.getAllByBookTitle
 );
 
 router.get(
 	'/user/name/:name', 
 	permission(['admin']), 
-	BorrowController.read.getAllByUserName
-);
-
-router.post(
-	'/', 
-	permission(['admin']), 
-	BorrowController.create
+	HistoryController.read.getAllByUserName
 );
 
 router.delete(
-	'/return/:id_book', 
+	'/:id', 
 	permission(['admin']), 
-	BorrowController.returnBook
+	HistoryController.remove.remove
+);
+
+router.delete(
+	'/older/:date', 
+	permission(['admin']), 
+	HistoryController.remove.removeOlderThan
 );
 
 module.exports = router;

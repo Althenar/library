@@ -24,9 +24,9 @@ produces:
 paths:
   /book:
     post:
-      description: Create a new book
-      operationId: create
-      summary: Create a book
+      description: create a new book
+      operationId: createBook
+      summary: create a book
       tags:
       - book
       produces:
@@ -34,7 +34,7 @@ paths:
       parameters:
       - name: book
         in: body
-        description: Book object that needs to be added to the library
+        description: book object that needs to be added to the library
         required: true
         schema:
           $ref: '#/definitions/newBook'
@@ -47,20 +47,18 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     get:
-      description: Show all books in the library
-      operationId: getAll
-      summary: Find all books
+      description: show all books in the library
+      operationId: getAllBooks
+      summary: find all books
       tags:
       - book
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       responses:
         '200':
-          description: shelves response
+          description: array of books with additional information about borrow and shelf
           schema:
           type: array
           items:
@@ -72,9 +70,9 @@ paths:
 
   /book/{id}:
     put:
-      description: Update an existing book
-      operationId: update
-      summary: Update an existing book
+      description: Update data of an existing book
+      operationId: updateBook
+      summary: Update a book
       tags:
       - book
       produces:
@@ -82,73 +80,71 @@ paths:
       parameters:
       - name: id
         in: path
-        description: id that need to be updated
+        description: id of a book that needs to be updated
         required: true
         type: integer
         format: int64
-      - in: body
-        name: body
-        description: Updated book object
+      - name: book
+        in: body
+        description: updated book object
         required: false
         schema:
           $ref: "#/definitions/book"
       responses:
         '200':
-          description: returns book json
+          description: returns updated book
           schema:
             $ref: '#/definitions/book'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     delete:
-      description: Delete a single book
-      operationId: remove
-      summary: Delete a book
+      description: delete a single book
+      operationId: removeBook
+      summary: delete a book
       tags:
       - book
       produces:
       - application/json
-      - application/xml
       consumes:
       - application/json
       parameters:
       - name: id
         in: path
-        description: ID of book to delete
+        description: id of book to delete
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: Success, book has been removed
+          description: success, book has been removed
           schema:
             $ref: "#/definitions/book"
         '400':
-          description: Invalid ID supplied
+          description: invalid id supplied
         '404':
-          description: Book not found
+          description: book not found
         '405':
-          description: Validation exception
+          description: validation exception
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     get:
-      description: Find book by id
-      operationId: getById
-      summary: Find book by id
+      description: find book by id
+      operationId: getBookById
+      summary: search for a book with it's id
       tags:
       - book
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: id
         in: path
-        description: ID of book to fetch
+        description: id of a book to fetch
         required: true
         type: integer
         format: int64
@@ -161,21 +157,19 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
   /book/borrowed:
     get:
-      description: Return all borrowed books
-      operationId: getAllBorrowed
-      summary: Find all borrowed books
+      description: return all books that are currently borrowed
+      operationId: getAllBooksBorrowed
+      summary: find all borrowed books
       tags:
       - book
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       responses:
         '200':
-          description: shelves response
+          description: returns array of books currently borrowed
           schema:
           type: array
           items:
@@ -185,108 +179,72 @@ paths:
         schema:
           $ref: '#/definitions/errorModel'
 
-  /book/title/{name}:
+  /book/in-queue:
     get:
-      description: Returns book by title
-      operationId: getAllByName
-      summary: Find book by title
+      description: return all books that are currently placed in queues
+      operationId: getAllBooksInQueue
+      summary: find all books in queue
       tags:
       - book
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
+      responses:
+        '200':
+          description: returns array of books currently placed in queue
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/book'
+      default:
+        description: unexpected error
+        schema:
+          $ref: '#/definitions/errorModel'
+
+  /book/title/{title}:
+    get:
+      description: returns books fetched by title
+      operationId: getAllBooksByTitle
+      summary: find books by title
+      tags:
+      - book
+      produces:
+      - application/json
       parameters:
-      - name: name
+      - name: title
         in: path
-        description: Book's title to fetch
+        description: Title of a book to get
         required: true
         type: string
       responses:
         '200':
-          description: book response
+          description: returns an array of books that match the title
           schema:
+          type: array
+          items:
             $ref: '#/definitions/book'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
   /book/isbn/{isbn}:
     get:
-      description: Returns book by isbn
-      operationId: getByISBN
-      summary: Find book by isbn
+      description: returns book with given isbn
+      operationId: getBookByISBN
+      summary: find a book with given isbn
       tags:
       - book
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: isbn
         in: path
-        description: ISBN of book to fetch
+        description: isbn of a book to fetch
         required: true
         type: string
       responses:
         '200':
-          description: book response
-          schema:
-            $ref: '#/definitions/bookcase'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/errorModel'
-  /book/author/{name}:
-    get:
-      description: Returns book by author
-      operationId: getAllByAuthor
-      summary: Find book by author
-      tags:
-      - book
-      produces:
-      - application/json
-      - application/xml
-      - text/xml
-      - text/html
-      parameters:
-      - name: name
-        in: path
-        description: name author of book to fetch
-        required: true
-        type: string
-      responses:
-        '200':
-          description: book response
-          schema:
-            $ref: '#/definitions/bookcase'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/errorModel'
-  /book/shelf/{id}:
-    get:
-      description: Returns shelf by id
-      operationId: getAllFromShelf
-      summary: Find shelf by id
-      tags:
-      - book
-      produces:
-      - application/json
-      - application/xml
-      - text/xml
-      - text/html
-      parameters:
-      - name: id
-        in: path
-        description: ID of shelf to fetch
-        required: true
-        type: string
-      responses:
-        '200':
-          description: book response
+          description: returns a book with matched isbn
           schema:
             $ref: '#/definitions/bookcase'
         default:
@@ -294,11 +252,119 @@ paths:
           schema:
             $ref: '#/definitions/errorModel'
 
+  /book/author/{name}:
+    get:
+      description: returns all books by author
+      operationId: getAllBooksByAuthor
+      summary: find books by author
+      tags:
+      - book
+      produces:
+      - application/json
+      parameters:
+      - name: name
+        in: path
+        description: name of book author
+        required: true
+        type: string
+      responses:
+        '200':
+          description: returns array of books by given author
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/book'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /book/borrowed-by/{name}:
+    get:
+      description: returns all books borrowed by user
+      operationId: getAllBooksByUserThatBorrowed
+      summary: find borrowed books of a user 
+      tags:
+      - book
+      produces:
+      - application/json
+      parameters:
+      - name: name
+        in: path
+        description: name of a user
+        required: true
+        type: string
+      responses:
+        '200':
+          description: returns array of books borrowed by user
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/book'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /book/shelf/{id}:
+    get:
+      description: returns all books on shelf
+      operationId: getAllBooksFromShelf
+      summary: find all books on shelf
+      tags:
+      - book
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of shelf
+        required: true
+        type: string
+      responses:
+        '200':
+          description: returns array of books on the shelf
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/book'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /book/bookcase/{id}:
+    get:
+      description: returns all books from bookcase
+      operationId: getAllBooksFromBookcase
+      summary: find all books in bookcase
+      tags:
+      - book
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of bookcase
+        required: true
+        type: string
+      responses:
+        '200':
+          description: returns array of books from the bookcase
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/book'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
   /bookcase:
     post:
-      description: Create a new bookcase
-      operationId: create
-      summary: Create a bookcase
+      description: create a new bookcase
+      operationId: createBookcase
+      summary: create a bookcase
       tags:
       - bookcase
       produces:
@@ -306,33 +372,31 @@ paths:
       parameters:
       - name: bookcase
         in: body
-        description: Bookcase object that needs to be added to the library
+        description: bookcase object that needs to be added to the library
         required: true
         schema:
           $ref: '#/definitions/newBookcase'
       responses:
         '200':
-          description: bookcase response
+          description: returns new Bookcase
           schema:
             $ref: '#/definitions/bookcase'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     get:
-      description: Show all bookcase in the library
-      operationId: getAll
-      summary: Find all bookcases
+      description: returns all bookcases in the library
+      operationId: getAllBookcase
+      summary: find all bookcases
       tags:
       - bookcase
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       responses:
         '200':
-          description: bookcase response
+          description: returns an array with all bookcases
           schema:
           type: array
           items:
@@ -344,9 +408,9 @@ paths:
 
   /bookcase/{id}:
     put:
-      description: Update an existing bookcase
-      operationId: update
-      summary: Update an existing bookcase
+      description: update an existing bookcase
+      operationId: updateBookcase
+      summary: update an existing bookcase
       tags:
       - bookcase
       produces:
@@ -354,77 +418,75 @@ paths:
       parameters:
       - name: id
         in: path
-        description: id that need to be updated
+        description: id of bookcase that needs to be updated
         required: true
         type: integer
         format: int64
       - in: body
-        name: body
-        description: Updated bookcase object
+        name: bookcase
+        description: updated bookcase object
         required: false
         schema:
         $ref: "#/definitions/bookcase"
       responses:
         '200':
-          description: returns bookcase json
-          schema:
-            $ref: '#/definitions/book'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/errorModel'
-    get:
-      description: Find bookcase by id
-      operationId: getById
-      summary: Find bookcase by id
-      tags:
-      - bookcase
-      produces:
-      - application/json
-      - application/xml
-      - text/xml
-      - text/html
-      parameters:
-      - name: id
-        in: path
-        description: ID of bookcase to fetch
-        required: true
-        type: integer
-        format: int64
-      responses:
-        '200':
-          description: bookcase response
+          description: returns updated bookcase json
           schema:
             $ref: '#/definitions/bookcase'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
-    delete:
-      description: Delete a single bookcase
-      operationId: remove
-      summary: Delete a bookcase
+
+    get:
+      description: find the bookcase by given id
+      operationId: getBookcaseById
+      summary: find bookcase by id
       tags:
       - bookcase
       produces:
       - application/json
-      - application/xml
-      consumes:
-      - application/json
       parameters:
       - name: id
         in: path
-        description: ID of bookcase to delete
+        description: id of bookcase to fetch
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: Success, bookcase has been removed
+          description: returns bookcase json by it's id
+          schema:
+            $ref: '#/definitions/bookcase'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+    delete:
+      description: delete a single bookcase
+      operationId: removeBookcase
+      summary: delete a bookcase
+      tags:
+      - bookcase
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of bookcase to delete
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: success, bookcase has been removed
           schema:
             $ref: "#/definitions/bookcase"
         '400':
-          description: Invalid ID supplied
+          description: Invalid id supplied
         '404':
           description: Bookcase not found
         '405':
@@ -434,56 +496,27 @@ paths:
           schema:
             $ref: '#/definitions/errorModel'
 
-  /bookcase/name/{name}:
-    get:
-      description: Find bookcase by name
-      operationId: getByName
-      summary: Find bookcase by name
-      tags:
-      - bookcase
-      produces:
-      - application/json
-      - application/xml
-      - text/xml
-      - text/html
-      parameters:
-      - name: name
-        in: path
-        description: Name of bookcase to fetch
-        required: true
-        type: string
-      responses:
-        '200':
-          description: bookcase response
-          schema:
-            $ref: '#/definitions/book'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/errorModel'
-
   /bookcase/search/{name}:
     get:
-      description: Find bookcase by name
-      operationId: getAllByName
-      summary: Find bookcase by name
+      description: find matching bookcases with given name
+      operationId: getAllBookcaseByName
+      summary: find all bookcases by name
       tags:
       - bookcase
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: name
         in: path
-        description: Name of bookcase to fetch
+        description: name of bookcase to search
         required: true
         type: string
       responses:
         '200':
-          description: bookcase response
+          description: returns an array of all bookcases with matching name
           schema:
+          type: array
+          items:
             $ref: '#/definitions/bookcase'
         default:
           description: unexpected error
@@ -492,9 +525,9 @@ paths:
 
   /shelf:
     post:
-      description: Create a new shelf
-      operationId: create
-      summary: Create a shelf
+      description: create a new shelf
+      operationId: createShelf
+      summary: create a new shelf
       tags:
       - shelf
       produces:
@@ -502,33 +535,31 @@ paths:
       parameters:
       - name: shelf
         in: body
-        description: Shelf object that needs to be added to the library
+        description: shelf object that needs to be added to the library
         required: true
         schema:
           $ref: '#/definitions/newShelf'
       responses:
         '200':
-          description: returns book json
+          description: returns new shelf json
           schema:
             $ref: '#/definitions/shelf'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     get:
-      description: Show all shelves in the library
-      operationId: getAll
-      summary: Find all shelves
+      description: show all shelves in the library
+      operationId: getAllShelf
+      summary: find all shelves
       tags:
       - shelf
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       responses:
         '200':
-          description: shelves response
+          description: returns an array with all shelves
           schema:
           type: array
           items:
@@ -540,9 +571,9 @@ paths:
 
   /shelf/{id}:
     put:
-      description: Update an existing shelf
-      operationId: update
-      summary: Update an existing shelf
+      description: update an existing shelf
+      operationId: updateShelf
+      summary: update an existing shelf
       tags:
       - shelf
       produces:
@@ -550,50 +581,50 @@ paths:
       parameters:
       - name: id
         in: path
-        description: id that need to be updated
+        description: id of shelf that needs to be updated
         required: true
         type: integer
         format: int64
-      - in: body
-        name: body
-        description: Updated shelf object
+      - name: shelf
+        in: body
+        description: updated shelf object
         required: false
         schema:
           $ref: "#/definitions/shelf"
       responses:
         '200':
-          description: returns shelf json
+          description: returns updated shelf json
           schema:
             $ref: '#/definitions/shelf'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     delete:
-      description: Delete a single shelf
-      operationId: remove
-      summary: Delete a shelf
+      description: delete a single shelf by it's id
+      operationId: removeShelf
+      summary: delete a shelf 
       tags:
       - shelf
       produces:
       - application/json
-      - application/xml
       consumes:
       - application/json
       parameters:
       - name: id
         in: path
-        description: ID of shelf to delete
+        description: id of shelf to delete
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: Success, shelf has been removed
+          description: success, shelf has been removed
           schema:
             $ref: "#/definitions/shelf"
         '400':
-          description: Invalid ID supplied
+          description: Invalid id supplied
         '404':
           description: shelf not found
         '405':
@@ -602,27 +633,25 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     get:
-      description: Find shelf by id
-      operationId: getById
-      summary: Find shelf by id
+      description: find shelf by id
+      operationId: getShelfById
+      summary: find shelf by id
       tags:
       - shelf
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: id
         in: path
-        description: ID of shelf to fetch
+        description: id of shelf
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: shelf response
+          description: returns a shelf with given id
           schema:
             $ref: '#/definitions/shelf'
         default:
@@ -632,9 +661,9 @@ paths:
 
   /shelf/row/{row}:
     get:
-      description: Find shelf by row
-      operationId: getAllByRow
-      summary: Find shelf by row
+      description: find all shelves in a row
+      operationId: getAllShelfByRow
+      summary: find all shelves by row
       tags:
       - shelf
       produces:
@@ -642,14 +671,16 @@ paths:
       parameters:
       - name: row
         in: path
-        description: Row of shelf to fetch
+        description: row of shelves to fetch
         required: true
         schema:
           $ref: '#/definitions/shelf'
       responses:
         '200':
-          description: returns shelf json
+          description: returns an array with all shelves in a row
           schema:
+          type: array
+          items:
             $ref: '#/definitions/shelf'
         default:
           description: unexpected error
@@ -658,9 +689,9 @@ paths:
 
   /shelf/col/{col}:
     get:
-      description: Find shelf by col
-      operationId: getAllByCol
-      summary: Find shelf by col
+      description: find all shelves by col
+      operationId: getAllShelfByCol
+      summary: find all shelves by col
       tags:
       - shelf
       produces:
@@ -674,18 +705,20 @@ paths:
           $ref: '#/definitions/shelf'
       responses:
         '200':
-          description: returns shelf json
+          description: returns an array with all shelves in a col
           schema:
+          type: array
+          items:
             $ref: '#/definitions/shelf'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
 
-  /shelf/r/{row}/c/{col}:
+  /shelf/row/{row}/col/{col}:
     get:
-      description: Find shelf by row and col
-      operationId: getByRowAndCol
+      description: Find a shelf in row and col
+      operationId: getShelfByRowAndCol
       summary: Find shelf by row and col
       tags:
       - shelf
@@ -694,68 +727,66 @@ paths:
       parameters:
       - name: row
         in: path
-        description: Row of shelf to fetch
+        description: row of shelf to fetch
         required: true
         schema:
           $ref: '#/definitions/shelf'
       - name: col
         in: path
-        description: Col of shelf to fetch
+        description: col of shelf to fetch
         required: true
         schema:
           $ref: '#/definitions/shelf'
       responses:
         '200':
-          description: returns shelf json
+          description: returns a shelf in a given row and col
           schema:
             $ref: '#/definitions/shelf'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
   /shelf/bookcase/{id}:
     get:
-      descriptiom: Find bookcase by id
-      operationId: getAllFromBookcase
-      summary: Find bookcase by id
+      description: find all shelves in bookcase
+      operationId: getAllShelfFromBookcase
+      summary: find all shelves in bookcase
       tags:
       - shelf
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: id
         in: path
-        description: ID of bookcase to fetch
+        description: id of bookcase
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: bookcase response
+          description: returns an array of shelves in given bookcase
           schema:
-            $ref: '#/definitions/bookcase'
+          type: array
+          items:
+            $ref: '#/definitions/shelf'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
   /user:
     get:
-      description: Show all users of the library
-      operationId: getAll
-      summary: Find all users
+      description: show all users of the library
+      operationId: getAllUsers
+      summary: find all users
       tags:
       - user
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       responses:
         '200':
-          description: users response
+          description: returns an array with all users in library
           schema:
           type: array
           items:
@@ -765,38 +796,30 @@ paths:
           schema:
             $ref: '#/definitions/errorModel'
 
-  /user/{id}:
+  /user/profile:
     get:
-      description: Find user by id
-      operationId: getById
-      summary: Find user by id
+      description: get data of currently logged in user 
+      operationId: getUserByCurrentId
+      summary: find current user
       tags:
       - user
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
-      parameters:
-      - name: id
-        in: path
-        description: ID of user to fetch
-        required: true
-        type: integer
-        format: int64
       responses:
         '200':
-          description: user response
+          description: returns a currently logged in user
           schema:
             $ref: '#/definitions/user'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
-    put:
-      description: Update an existing user
-      operationId: update
-      summary: Update an existing user
+
+  /user/profile/{id}:
+    get:
+      description: find user in library by it's id
+      operationId: getUserById
+      summary: find user by id
       tags:
       - user
       produces:
@@ -804,82 +827,103 @@ paths:
       parameters:
       - name: id
         in: path
-        description: id that need to be updated
+        description: id of user to fetch
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: returns a user with given id
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+    put:
+      description: update an existing user
+      operationId: updateUser
+      summary: update an existing user
+      tags:
+      - user
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of user that needs to be updated
         required: true
         type: integer
         format: int64
       - in: body
-        name: body
-        description: Updated user object
+        name: user
+        description: updated user object
         required: false
         schema:
           $ref: "#/definitions/user"
       responses:
         '200':
-          description: returns book json
+          description: returns updated user json
           schema:
             $ref: '#/definitions/user'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     delete:
-      description: Delete a user
-      operationId: remove
-      summary: Delete a user
+      description: delete a user
+      operationId: removeUser
+      summary: delete a user
       tags:
       - user
       produces:
       - application/json
-      - application/xml
       consumes:
       - application/json
       parameters:
       - name: id
         in: path
-        description: ID of user to delete
+        description: id of user to delete
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: Success, user has been removed
+          description: success, user has been removed
           schema:
             $ref: "#/definitions/user"
         '400':
-          description: Invalid ID supplied
+          description: invalid id supplied
         '404':
-          description: User not found
+          description: user not found
         '405':
-          description: Validation exception
+          description: validation exception
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
 
-
   /user/provider/{id}:
     get:
-      description: Find user by id
-      operationId: getByIdByProvider
-      summary: Find user by id
+      description: find user by id from provider
+      operationId: getUserByIdByProvider
+      summary: find user by id from provider
       tags:
       - user
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: id
         in: path
-        description: ID of user to fetch
+        description: provider-id of user to fetch
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: user response
+          description: returns a user with given id from provider 
           schema:
             $ref: '#/definitions/user'
         default:
@@ -889,26 +933,25 @@ paths:
 
   /user/provider/name/{provider}:
     get:
-      description: Returns user by provider
-      operationId: getAllByProvider
-      summary: Find user by provider
+      description: returns all users by provider
+      operationId: getAllUserByProvider
+      summary: find all users by provider
       tags:
       - user
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: provider
         in: path
-        description: User's provider to fetch
+        description: login provider for users
         required: true
         type: string
       responses:
         '200':
-          description: user response
+          description: returns an array with all users from given provider
           schema:
+          type: array
+          items:
             $ref: '#/definitions/user'
         default:
           description: unexpected error
@@ -917,9 +960,9 @@ paths:
 
   /user/provider/{id}/{provider}:
     get:
-      description: Find user by id and provider
-      operationId: getByProviderAndIdByProvider
-      summary: Find user by id and provider
+      description: find user by id from provider and name of provider
+      operationId: getUserByProviderAndIdByProvider
+      summary: find user by id from provider and name of provider
       tags:
       - user
       produces:
@@ -927,19 +970,19 @@ paths:
       parameters:
       - name: id
         in: path
-        description: Id by provider of user to fetch
+        description: id from provider of user to fetch
         required: true
         schema:
           $ref: '#/definitions/user'
       - name: provider
         in: path
-        description: Provider of user to fetch
+        description: provider name of user to fetch
         required: true
         schema:
           $ref: '#/definitions/user'
       responses:
         '200':
-          description: returns user json
+          description: returns user by given provider name and id from provider
           schema:
             $ref: '#/definitions/user'
         default:
@@ -949,26 +992,25 @@ paths:
 
   /user/name/{name}:
     get:
-      description: Returns user by name
-      operationId: getAllByName
-      summary: Find user by name
+      description: returns all users matched with given name
+      operationId: getAllUserByName
+      summary: find all users with name
       tags:
       - user
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: name
         in: path
-        description: User's name to fetch
+        description: name to search for users
         required: true
         type: string
       responses:
         '200':
-          description: user response
+          description: returns an array of users with matching name
           schema:
+          type: array
+          items:
             $ref: '#/definitions/user'
         default:
           description: unexpected error
@@ -977,26 +1019,25 @@ paths:
 
   /user/role/{role}:
     get:
-      description: Returns user by role
-      operationId: getAllByProvider
-      summary: Find user by role
+      description: returns all users with role
+      operationId: getAllUserByProvider
+      summary: find users with role
       tags:
       - user
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: role
         in: path
-        description: User's role to fetch
+        description: user's role
         required: true
         type: string
-      responses:
+      responses:  
         '200':
-          description: user response
+          description: returns an array with all users with matching role
           schema:
+          type: array
+          items:
             $ref: '#/definitions/user'
         default:
           description: unexpected error
@@ -1005,19 +1046,16 @@ paths:
 
   /borrow:
     get:
-      description: Show all borrow in the library
-      operationId: getAll
-      summary: Find all borrow in the library
+      description: show all borrow in the library
+      operationId: getAllBorrow
+      summary: find all borrow in the library
       tags:
       - borrow
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       responses:
         '200':
-          description: borrow response
+          description: returns an array with all borrows
           schema:
           type: array
           items:
@@ -1026,10 +1064,11 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
     post:
-        description: Create a new borrow
-        operationId: create
-        summary: Create a borrow
+        description: create a new borrow
+        operationId: createBorrow
+        summary: create new borrow
         tags:
         - borrow
         produces:
@@ -1037,104 +1076,94 @@ paths:
         parameters:
         - name: borow
           in: body
-          description: Borrow object that needs to be added to the library
+          description: new borrow object to add to library
           required: true
           schema:
             $ref: '#/definitions/newBorrow'
         responses:
           '200':
-            description: returns book json
+            description: returns new borrow json
             schema:
               $ref: '#/definitions/borrow'
           default:
             description: unexpected error
             schema:
               $ref: '#/definitions/errorModel'
-  /borrow/{id}:
+
+  /borrow/return/{id_book}:
     delete:
-      description: Delete a borrow
-      operationId: remove
-      summary: Delete a borrow
+      description: delete a borrow / return a book
+      operationId: returnBook
+      summary: delete a borrow
       tags:
       - borrow
       produces:
       - application/json
-      - application/xml
       consumes:
       - application/json
       parameters:
-      - name: id
+      - name: id_book
         in: path
-        description: ID of borrow to delete
+        description: id of book to return
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: Success, book has been removed
+          description: success, borrow has been removed
           schema:
             $ref: "#/definitions/borrow"
         '400':
-          description: Invalid ID supplied
+          description: invalid id supplied
         '404':
-          description: Borrow not found
+          description: borrow not found
         '405':
-          description: Validation exception
+          description: validation exception
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
-    put:
-      description: Update an existing borrow
-      operationId: update.update
-      summary: Update an existing borrow
+
+  /borrow/user:
+    get:
+      description: find borrows of current user
+      operationId: getAllBorrowByCurrentUser
+      summary: find borrows of current user
       tags:
       - borrow
       produces:
       - application/json
-      parameters:
-      - name: id
-        in: path
-        description: id that need to be updated
-        required: true
-        type: integer
-        format: int64
-      - in: body
-        name: borrow
-        description: Updated borrow object
-        required: true
-        schema:
-          $ref: "#/definitions/borrow"
       responses:
         '200':
-          description: returns borrow json
+          description: returns an array with all borrows of current user
           schema:
+          type: array
+          items:
             $ref: '#/definitions/borrow'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
+
+  /borrow/{id}:
     get:
-      description: Find borrow by id
-      operationId: getById
-      summary: Find borrow by id
+      description: find borrow by id
+      operationId: getBorrowById
+      summary: find borrow by id
       tags:
       - borrow
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: id
         in: path
-        description: ID of borrow to fetch
+        description: id of borrow to fetch
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: borrow response
+          description: returns a borrow with given id
           schema:
             $ref: '#/definitions/borrow'
         default:
@@ -1144,26 +1173,23 @@ paths:
 
   /borrow/book/{id}:
     get:
-      description: Find borrow by id of book
-      operationId: getAllByBookId
-      summary: Find borrow by id of book
+      description: find borrow by id of book
+      operationId: getBorrowByBookId
+      summary: find borrow by id of book
       tags:
       - borrow
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: id
         in: path
-        description: ID of book to fetch
+        description: id of a book to fetch borrow
         required: true
         type: integer
         format: int64
       responses:
         '200':
-          description: borrow response
+          description: returns a borrow json of a given book
           schema:
             $ref: '#/definitions/borrow'
         default:
@@ -1173,60 +1199,9 @@ paths:
 
   /borrow/user/{id}:
     get:
-      description: Find all borrow by id of user
-      operationId: getAllBorrowed
-      summary: Find borrow by id of user
-      tags:
-      - borrow
-      produces:
-      - application/json
-      - application/xml
-      - text/xml
-      - text/html
-      parameters:
-      - name: id
-        in: path
-        description: ID of user to fetch
-        required: true
-        type: integer
-        format: int64
-      responses:
-        '200':
-          description: borrow response
-          schema:
-            $ref: '#/definitions/borrow'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/errorModel'
-
-  /borrow/borrowed:
-    get:
-      description: Show all borrowed books in the library
-      operationId: getAllBorrowed
-      summary: Find all borrowed books in the library
-      tags:
-      - borrow
-      produces:
-      - application/json
-      - application/xml
-      - text/xml
-      - text/html
-      responses:
-        '200':
-          description: borrow response
-          schema:
-            $ref: '#/definitions/borrow'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/errorModel'
-
-  /borrow/return/{id}:
-    put:
-      description: Update a returned book
-      operationId: returnBook
-      summary: Update a returned book
+      description: Find all borrows by id of user
+      operationId: getAllBorrowByUserId
+      summary: find all borrows by id of user
       tags:
       - borrow
       produces:
@@ -1234,20 +1209,16 @@ paths:
       parameters:
       - name: id
         in: path
-        description: id that need to be updated
+        description: id of user to fetch borrows
         required: true
         type: integer
         format: int64
-      - in: body
-        name: body
-        description: Updated borrow object
-        required: false
-        schema:
-          $ref: "#/definitions/borrow"
       responses:
         '200':
-          description: returns book json
+          description: returns an array with all borrows of given user
           schema:
+          type: array
+          items:
             $ref: '#/definitions/borrow'
         default:
           description: unexpected error
@@ -1256,26 +1227,23 @@ paths:
 
   /borrow/from/{date}:
     get:
-      description: Find all borrow from specified date
-      operationId: getAllFromDate
-      summary: Find all borrow from specified date
+      description: show all borrows from given date to now
+      operationId: getAllBorrowFromDate
+      summary: find all borrowed books in the library from some date
       tags:
       - borrow
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
       - name: date
         in: path
-        description: Date of borrow to fetch
+        description: any date from the past
         required: true
         type: string
         format: date-time
       responses:
         '200':
-          description: borrow response
+          description: returns an array with all borrows from given date till today
           schema:
             $ref: '#/definitions/borrow'
         default:
@@ -1285,44 +1253,654 @@ paths:
 
   /borrow/{fromDate}/{tillDate}:
     get:
-      description: Find all borrow from specified dates
-      operationId: getAllFromDateTillDate
-      summary: Find all borrow from specified dates
+      description: find all borrow from specified dates
+      operationId: getAllBorrowFromDateTillDate
+      summary: find all borrow from specified dates
       tags:
       - borrow
       produces:
       - application/json
-      - application/xml
-      - text/xml
-      - text/html
       parameters:
-      - name: from date
+      - name: fromDate
         in: path
-        description: Date of borrow to fetch
+        description: date from when to fetch borrow
         required: true
         type: string
         format: date-time
-      - name: till date
+      - name: tillDate
         in: path
-        description: Date of return to fetch
+        description: date till when to fetch borrow
         required: true
         type: string
         format: date-time
       responses:
         '200':
-          description: borrow response
+          description: returns an array of borrows from between specified dates
           schema:
+          type: array
+          items:
             $ref: '#/definitions/borrow'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
 
+  /borrow/book/title/{title}:
+    get:
+      description: find all borrow by matching book title
+      operationId: getAllBorrowByBookTitle
+      summary: find all borrow with matching book title
+      tags:
+      - borrow
+      produces:
+      - application/json
+      parameters:
+      - name: title
+        in: path
+        description: title of book to look for
+        required: true
+        type: string
+      responses:
+        '200':
+          description: returns an array of borrows with matching book titles
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/borrow'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /borrow/user/name/{name}:
+    get:
+      description: find all borrow by matching username
+      operationId: getAllBorrowByUserName
+      summary: find all borrow with matching username
+      tags:
+      - borrow
+      produces:
+      - application/json
+      parameters:
+      - name: name
+        in: path
+        description: name of user to look for
+        required: true
+        type: string
+      responses:
+        '200':
+          description: returns an array of borrows with matching username
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/borrow'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history:
+    get:
+      description: get all history from the library
+      operationId: getAllHistory
+      summary: find all saved history of borrowing books from the library
+      tags:
+      - history
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: returns an array with all saved history
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/history'
+        default: 
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history/user:
+    get:
+      description: get all borrow history of currently logged in user
+      operationId: getAllHistoryByCurrentUser
+      summary: find all borrows of current user
+      tags:
+      - history
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: returns an array with all saved history of current user
+          schema: 
+          type: array
+          items:
+            $ref: '#/definitions/history'
+        default:
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /history/{id}:
+    get:
+      description: get a history by it's id
+      operationId: getHistoryById
+      summary: find one history by id
+      tags:
+      - history
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of history to fetch
+        required: true
+        type: integer
+        format: int64
+      responses: 
+        '200':
+          description: returns a history object by given id
+          schema:
+            $ref: '#/definitions/history'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+    delete:
+      description: delete a history with it's id
+      operationId: removeHistory
+      summary: delete a history
+      tags:
+      - history
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of history
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: success, history has been removed
+          schema:
+            $ref: "#/definitions/history"
+        '400':
+          description: invalid id supplied
+        '404':
+          description: history not found
+        '405':
+          description: validation exception
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history/book/{id}:
+    get:
+      description: get all history of some book by it's id
+      operationId: getAllHistoryByBookId
+      summary: get all history by id of a book
+      tags:
+      - history
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of book
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: returns an array with all borrow history of given book
+          schema:
+          type: array
+          items: 
+            $ref: '#/definitions/history'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history/user/{id}:
+    get:
+      description: get all history of some user by it's id
+      operationId: getAllHistoryByUserId
+      summary: get all history by id of a user
+      tags:
+      - history
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of user
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: returns an array with all history of given user
+          schema:
+          type: array
+          items: 
+            $ref: '#/definitions/history'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history/from/{date}:
+    get:
+      description: show all history from given date to now
+      operationId: getAllHistoryFromDate
+      summary: find all history from specified date to now
+      tags:
+      - history
+      produces:
+      - application/json
+      parameters:
+      - name: date
+        in: path
+        description: any date from the past
+        required: true
+        type: string
+        format: date-time
+      responses:
+        '200':
+          description: returns an array with all history from given date till today
+          schema:
+            $ref: '#/definitions/history'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history/{fromDate}/{tillDate}:
+    get:
+      description: find all history from specified dates
+      operationId: getAllHistoryFromDateTillDate
+      summary: find all history from specified dates
+      tags:
+      - history
+      produces:
+      - application/json
+      parameters:
+      - name: fromDate
+        in: path
+        description: date from when to fetch history
+        required: true
+        type: string
+        format: date-time
+      - name: tillDate
+        in: path
+        description: date till when to fetch history
+        required: true
+        type: string
+        format: date-time
+      responses:
+        '200':
+          description: returns an array of history from between specified dates
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/history'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history/book/title/{title}:
+    get:
+      description: find all history by matching book title
+      operationId: getAllHistoryByBookTitle
+      summary: find all history with matching book title
+      tags:
+      - history
+      produces:
+      - application/json
+      parameters:
+      - name: title
+        in: path
+        description: title of book to look for
+        required: true
+        type: string
+      responses:
+        '200':
+          description: returns an array of history with matching book titles
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/history'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history/user/name/{name}:
+    get:
+      description: find all history by matching username
+      operationId: getAllHistoryByUserName
+      summary: find all history with matching username
+      tags:
+      - history
+      produces:
+      - application/json
+      parameters:
+      - name: name
+        in: path
+        description: name of user to look for
+        required: true
+        type: string
+      responses:
+        '200':
+          description: returns an array of history with matching username
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/history'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /history/older/{date}:
+    delete:
+      description: delete from history where return date is older than specified date
+      operationId: removeAllHistoryOlderThan
+      summary: delete from history if older than given date
+      tags:
+      - history
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: date
+        in: path
+        description: date from the past
+        required: true
+        type: string
+        format: date-time
+      responses:
+        '200':
+          description: success, all history older than specified date have been removed
+          schema:
+            $ref: "#/definitions/history"
+        '400':
+          description: invalid id supplied
+        '404':
+          description: history not found
+        '405':
+          description: validation exception
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /queue:
+    get:
+      description: get all existing queues from the library
+      operationId: getAllQueue
+      summary: get all queues from library
+      tags:
+      - queue
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: returns an array with all queues in library
+          schema:
+          type: array
+          items: 
+            $ref: '#/definitions/queue'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+    post:
+      description: create a new queue
+      operationId: createQueue
+      summary: create a queue
+      tags:
+      - queue
+      produces:
+      - application/json
+      parameters:
+      - name: queue
+        in: body
+        description: queue object that needs to be added to the library
+        required: true
+        schema:
+          $ref: '#/definitions/newQueue'
+      responses:
+        '200':
+          description: returns new queue json
+          schema:
+            $ref: '#/definitions/queue'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /queue/user:
+    get:
+      description: get all queues of currently logged in user
+      operationId: getAllQueueByCurrentUser
+      summary: get all queues of current user
+      tags:
+      - queue
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: returns an array with queue of currently loged in user
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/queue'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /queue/user/{id}:
+    get:
+      description: get all queues of user with specified id
+      operationId: getAllQueueByUserId
+      summary: get all queues of user with given id
+      tags:
+      - queue
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of a user
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: returns an array with queue of some user
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/queue'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /queue/book/{id}:
+    get:
+      description: get all queues of book with specified id
+      operationId: getAllQueueByBookId
+      summary: get all queues of book with given id
+      tags:
+      - queue
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of a book
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: returns an array with queue of some book
+          schema:
+          type: array
+          items:
+            $ref: '#/definitions/queue'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /queue/user/{id_user}/position/{position}:
+    get:
+      description: get queue with specified user id and position
+      operationId: getAllQueueByIdUserAndPosition
+      summary: get queue of user at specified position
+      tags:
+      - queue
+      produces:
+      - application/json
+      parameters:
+      - name: id_user
+        in: path
+        description: id of a user
+        required: true
+        type: integer
+        format: int64
+      - name: position
+        in: path
+        description: position in queue
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: returns queue object of user at specified position
+          schema:
+            $ref: '#/definitions/queue'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /queue/user/{id_user}/book/{id_book}:
+    get:
+      description: get queue with specified user id and book
+      operationId: getAllQueueByIdUserAndIdBook
+      summary: get queue with user and book id
+      tags:
+      - queue
+      produces:
+      - application/json
+      parameters:
+      - name: id_user
+        in: path
+        description: id of a user
+        required: true
+        type: integer
+        format: int64
+      - name: id_book
+        in: path
+        description: id of a book
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: returns queue object of user with specified book
+          schema:
+            $ref: '#/definitions/queue'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /queue/{id}:
+    put:
+      description: Update data of an existing queue
+      operationId: updateQueue
+      summary: Update a queue
+      tags:
+      - queue
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of a queue that needs to be updated
+        required: true
+        type: integer
+        format: int64
+      - name: queue
+        in: body
+        description: updated queue object
+        required: false
+        schema:
+          $ref: "#/definitions/queue"
+      responses:
+        '200':
+          description: returns updated queue
+          schema:
+            $ref: '#/definitions/queue'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+    delete:
+      description: delete a queue with it's id
+      operationId: removeQueue
+      summary: delete a queue
+      tags:
+      - queue
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of queue
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: success, queue has been removed
+          schema:
+            $ref: "#/definitions/queue"
+        '400':
+          description: invalid id supplied
+        '404':
+          description: queue not found
+        '405':
+          description: validation exception
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+
 definitions:
   book:
     type: object
     required:
-    - id
     - isbn
     properties:
       id:
@@ -1347,6 +1925,13 @@ definitions:
         enum:
         - true
         - false
+        example: false
+      in-queue:
+        type: string
+        enum:
+        - true
+        - false
+        example: false
 
   newBook:
     type: object
@@ -1368,7 +1953,6 @@ definitions:
         type: string
         example: 'Example Title'
 
-
   errorModel:
     type: object
     required:
@@ -1389,37 +1973,44 @@ definitions:
     - id
     - row
     - col
+    - id_bookcase
     properties:
       id:
         type: integer
         format: int64
+        example: 3
       row:
         type: integer
         format: int
+        example: 2
       col:
         type: integer
         format: int
-      books:
-        type: array
-        items:
-          $ref: '#/definitions/book'
+        example: 2
+      id_bookcase:
+        type: integer
+        format: int64
+        example: 1
 
   newShelf:
     type: object
     required:
-    - bookcase
+    - id_bookcase
     - row
     - col
     properties:
       id_bookcase:
         type: integer
         format: int64
+        example: 2
       row:
         type: integer
         format: int
+        example: 2
       col:
         type: integer
         format: int
+        example: 2
 
   bookcase:
     type: object
@@ -1430,12 +2021,10 @@ definitions:
       id:
         type: integer
         format: int64
+        example: 3
       name:
         type: string
-      shelves:
-        type: array
-        items:
-          $ref: '#/definitions/shelf'
+        example: 'Example Name'
 
   newBookcase:
     type: object
@@ -1444,6 +2033,7 @@ definitions:
     properties:
       name:
         type: string
+        example: 'Example Name'
 
   user:
     type: object
@@ -1453,20 +2043,25 @@ definitions:
       id:
         type: integer
         format: int64
+        example: 3
       name:
         type: string
+        example: 'Example Name'
       provider:
         type: string
+        example: 'Example Provider'
       idByProvider:
         type: string
+        example: 'ExampleIdByProvider'
       role:
         type: string
+        format:
+        - 'admin'
+        - 'user'
+        example: 'user'
 
   borrow:
     type: object
-    required:
-    - id_user
-    - id_book
     properties:
       id:
         type: integer
@@ -1475,13 +2070,11 @@ definitions:
       borrowDate:
         type: string
         format: date-time
-      returnDate:
-        type: string
-        format: date-time
+        example: '2018-10-10'
       id_user:
         type: integer
         format: int64
-        example: 2
+        example: 25
       id_book:
         type: integer
         format: int64
@@ -1496,16 +2089,81 @@ definitions:
       borrowDate:
         type: string
         format: date-time
-      returnDate:
-        type: string
-        format: date-time
+        example: '2018-10-10'
       id_user:
         type: integer
         format: int64
+        example: 25
       id_book:
         type: integer
         format: int64
+        example: 25
 
+  queue:
+    type: object
+    required:
+      - id_user
+      - position
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 1
+      position:
+        type: integer
+        format: int64
+        example: 5
+      id_user:
+        type: integer
+        format: int64
+        example: 25
+      id_book:
+        type: integer
+        format: int64
+        example: 25
+
+  newQueue:
+    type: object
+    required:
+      - id_user
+      - position
+    properties:
+      position:
+        type: integer
+        format: int64
+        example: null
+      id_user:
+        type: integer
+        format: int64
+        example: 25
+      id_book:
+        type: integer
+        format: int64
+        example: 25
+
+  history:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 2
+      borrowDate:
+        type: string
+        format: date-time
+        example: '2018-10-10'
+      returnDate:
+        type: string
+        format: date-time
+        example: '2018-10-12'
+      id_user:
+        type: integer
+        format: int64
+        example: 25
+      id_book:
+        type: integer
+        format: int64
+        example: 25
 
 externalDocs:
   description: Github

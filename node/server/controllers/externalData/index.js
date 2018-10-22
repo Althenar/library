@@ -1,6 +1,7 @@
 'use strict';
 
-const bookApi = require('./bookApi');
+const 
+	bookApi = require('./bookApi');
 
 async function getExternalData(book){
 	const data = await bookApi(book.isbn);

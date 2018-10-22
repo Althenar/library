@@ -1,27 +1,12 @@
 'use strict';
 
-const FacebookStrategy = require('passport-facebook');
-const UserService = require('../../../server/services/user');
-const facebookKey = require('../../settings').facebook;
+const 
+	FacebookStrategy = require('passport-facebook');
 
-module.exports = new FacebookStrategy(facebookKey, 
-	(accessToken, refreshToken, profile, done) => {
-		UserService.read.getByProviderAndIdByProvider(profile.provider, profile.id)
-			.then((currentUser) => {
-				if (currentUser)
-					done(null, currentUser.toJSON());
-				else {
-					const user = {
-						name: profile.displayName,
-						provider: profile.provider,
-						idByProvider: profile.id
-					};
+const 
+	verifyCallback = require('../verifyCallback'),
+	facebookKey = require('../../settings').facebook;
 
-					UserService.create(user)
-						.then((newUser) => {
-							done(null, newUser.toJSON());
-						});
-				}
-			});
-	}
-);
+const facebook = new FacebookStrategy(facebookKey, verifyCallback);
+
+module.exports = facebook;

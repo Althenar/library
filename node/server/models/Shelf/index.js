@@ -4,7 +4,7 @@ const db = require('../index');
 
 require('../Bookcase');
 
-const Shelf = db.model('Shelf',{
+const Shelf = db.model('Shelf', {
 	tableName: 'shelf',
 	bookcase: function () {
 		return this.hasOne('Bookcase', 'id', 'id_bookcase');

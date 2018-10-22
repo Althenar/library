@@ -1,28 +1,83 @@
 'use strict'; 
 
-const router = require('express').Router();
-const permission = require('permission');
+const 
+	router = require('express').Router(),
+	permission = require('permission');
 
-const BookController = require('../../../controllers/book');
+const 
+	BookController = require('../../../controllers/book');
 
-router.get('/', BookController.read.getAll);
+router.get(
+	'/', 
+	BookController.read.getAll
+);
 
-router.get('/:id', BookController.read.getById);
+router.get(
+	'/borrowed', 
+	permission(['admin']), 
+	BookController.read.getAllBorrowed
+);
 
-router.get('/borrowed', permission(['admin']), BookController.read.getAllBorrowed);
+router.get(
+	'/in-queue', 
+	permission(['admin']), 
+	BookController.read.getAllInQueue
+);
 
-router.get('/title/:name', BookController.read.getAllByName);
+router.get(
+	'/:id', 
+	BookController.read.getById
+);
 
-router.get('/isbn/:isbn', BookController.read.getByISBN);
+router.get(
+	'/title/:title', 
+	BookController.read.getAllByTitle
+);
 
-router.get('/author/:name', BookController.read.getAllByAuthor);
+router.get(
+	'/isbn/:isbn', 
+	BookController.read.getByISBN
+);
 
-router.get('/shelf/:id', permission(['user', 'admin']), BookController.read.getAllFromShelf);
+router.get(
+	'/author/:name', 
+	BookController.read.getAllByAuthor
+);
 
-router.post('/', permission(['admin']), BookController.create);
+router.get(
+	'/borrowed-by/:name',
+	permission(['user', 'admin']),
+	BookController.read.getAllByUserThatBorrowed
+);
 
-router.put('/:id', permission(['admin']), BookController.update);
+router.get(
+	'/shelf/:id', 
+	permission(['user', 'admin']), 
+	BookController.read.getAllFromShelf
+);
 
-router.delete('/:id', permission(['admin']), BookController.remove);
+router.get(
+	'/bookcase/:id', 
+	permission(['user', 'admin']), 
+	BookController.read.getAllFromBookcase
+);
+
+router.post(
+	'/', 
+	permission(['admin']), 
+	BookController.create
+);
+
+router.put(
+	'/:id', 
+	permission(['admin']), 
+	BookController.update
+);
+
+router.delete(
+	'/:id', 
+	permission(['admin']), 
+	BookController.remove
+);
 
 module.exports = router;

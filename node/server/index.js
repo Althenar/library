@@ -2,59 +2,58 @@
 
 const
 	express = require('express'),
-	logger = require('morgan'),
 	cookieParser = require('cookie-parser'),
-	passport = require('../configs/passport'),
 	session = require('cookie-session'),
+	logger = require('morgan'),
 	https = require('https'),
-	fs = require('fs');
+	fs = require('fs'),
+	server = express();
 
-const key = fs.readFileSync('configs/encryption/key.pem', 'utf8');
-const cert = fs.readFileSync('configs/encryption/server.crt', 'utf8');
+const 
+	passport = require('../configs/passport');
 
-module.exports = () => {
+const 
+	key = fs.readFileSync('configs/encryption/key.pem', 'utf8'),
+	cert = fs.readFileSync('configs/encryption/server.crt', 'utf8');
 
-	const server = express();
+const create = (config) => {
 
-	const create = (config) => {
+	const 
+		routes = require('./routes/index'),
+		cookieSettings = require('../configs/settings').cookieSettings;
 
-		const routes = require('./routes/index');
-		const cookieSettings = require('../configs/settings').cookieSettings;
+	server.set('env', config.env);
+	server.set('port', config.port);
+	server.set('hostname', config.hostname);
 
+	server.use(express.json());
+	server.use(logger('dev'));
+	server.use(express.urlencoded({ extended: false }));
+	server.use(cookieParser());
 
+	server.use(session(cookieSettings));
 
-		server.set('env', config.env);
-		server.set('port', config.port);
-		server.set('hostname', config.hostname);
+	server.use(passport.initialize());
+	server.use(passport.session());
 
-		server.use(express.json());
-		server.use(logger('dev'));
-		server.use(express.urlencoded({ extended: false }));
-		server.use(cookieParser());
+	routes.init(server);
+};
 
-		server.use(session(cookieSettings));
+const start = () => {
 
-		server.use(passport.initialize());
-		server.use(passport.session());
+	const 
+		hostname = server.get('hostname'),
+		port = server.get('port');
 
-		routes.init(server);
-	};
+	https.createServer({
+		key: key,
+		cert: cert
+	}, server).listen(port, () => {
+		console.log(`Express server listening on - https://${hostname}:${port}/`);
+	});
+};
 
-	const start = () => {
-
-		const hostname = server.get('hostname'),
-			port = server.get('port');
-
-		https.createServer({
-			key: key,
-			cert: cert
-		}, server).listen(port, () => {
-			console.log(`Express server listening on - https://${hostname}:${port}/`);
-		});
-	};
-
-	return {
-		create: create,
-		start: start
-	};
+module.exports = {
+	create,
+	start
 };

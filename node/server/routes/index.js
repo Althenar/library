@@ -1,19 +1,19 @@
 'use strict';
 
 const
-	permission = require('permission'),
 	YAML = require('yamljs'),
-	swaggerUi = require('swagger-ui-express'),
-	swaggerDocument = YAML.load('./server/swagger.yaml');
+	permission = require('permission'),
+	swaggerUi = require('swagger-ui-express');
 
 const
 	apiRoute = require('./api'),
 	authRoutes = require('./auth'),
-	homeRoute = require('./home');
+	swaggerDocument = YAML.load('./server/swagger.yaml');
 
 const init = (server) => {
 	server.get('*', (req, res, next) => {
 		console.log(`Request was made to: ${req.originalUrl}`);
+		
 		return next();
 	});
 
@@ -22,9 +22,14 @@ const init = (server) => {
 	});
 
 	server.use('/api', apiRoute);
-	server.use('/home', homeRoute);
 	server.use('/auth', authRoutes);
-	server.use('/api-docs', permission(['admin']), swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+	server.use(
+		'/api-docs', 
+		permission(['admin']), 
+		swaggerUi.serve, 
+		swaggerUi.setup(swaggerDocument)
+	);
 };
 
 module.exports = {

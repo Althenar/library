@@ -1,9 +1,10 @@
 'use strict';
 
-const passport = require('passport');
-const UserService = require('../../server/services/user');
+const 
+	passport = require('passport');
 
-const
+const 
+	UserService = require('../../server/services/user'),
 	google = require('./google-OAuth'),
 	facebook = require('./facebook-OAuth');
 

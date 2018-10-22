@@ -2,21 +2,23 @@
 
 const db = require('../index');
 
-require('../Borrow');
 require('../Queue');
+require('../Borrow');
+require('../History');
 
-const User = db.model('User',{
+const User = db.model('User', {
 	tableName: 'user',
-	borrowed: function (){
-		return this.hasMany('Borrow', 'id_user', 'id');
-	},
 	queue: function (){
 		return this.hasMany('Queue', 'id_user', 'id');
 	},
+	borrow: function (){
+		return this.hasMany('Borrow', 'id_user', 'id');
+	},
+	history: function (){
+		return this.hasMany('History', 'id_user', 'id');
+	},
 	validations: {
-		name: 'isRequired',
-		provider: 'isRequired',
-		idByProvider: 'isRequired'
+		name: 'isRequired'
 	}
 });
 
